@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>hrry.online | The Ultimate Premium App Store</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #030305;
+            --surface-color: rgba(20, 20, 25, 0.4);
+            --glass-white: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --danger: #ff0844;
+            --danger-light: #ffb199;
+            --success: #43e97b;
+            --success-light: #38f9d7;
+            --warning: #ffc107;
+            --text-main: #ffffff;
+            --text-muted: #a0a0b5;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: var(--font-body); overflow-x: hidden;
+            min-height: 100vh; scroll-behavior: smooth;
+        }
+
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        .loader-ring {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 4px solid transparent; border-top-color: var(--primary); border-bottom-color: var(--danger);
+            animation: spinLoader 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 3, 5, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            z-index: 9000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: 0.6s ease;
+        }
+        .login-box {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border: 1px solid var(--glass-border); border-radius: 30px;
+            padding: 40px 30px; width: 90%; max-width: 400px; text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            transform: translateY(50px) scale(0.9); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #loginOverlay.active { opacity: 1; visibility: visible; }
+        #loginOverlay.active .login-box { transform: translateY(0) scale(1); }
+
+        .animated-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden;
+            background: radial-gradient(circle at center, #0a0a0f 0%, #000000 100%);
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(120px);
+            animation: floatOrb 25s infinite alternate ease-in-out; opacity: 0.3; pointer-events: none;
+        }
+        .orb:nth-child(1) { width: 400px; height: 400px; background: #4facfe; top: -15%; left: -15%; }
+        .orb:nth-child(2) { width: 500px; height: 500px; background: #ff0844; bottom: -15%; right: -15%; animation-delay: -5s; }
+        .orb:nth-child(3) { width: 350px; height: 350px; background: #43e97b; top: 50%; left: 50%; animation-duration: 30s; }
+
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-100px, -150px) scale(1.1); } }
+        @keyframes spinLoader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        header {
+            position: sticky; top: 0; z-index: 100; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10, 10, 15, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .brand-name {
+            font-family: var(--font-head); font-size: 26px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px;
+            background: linear-gradient(90deg, #ff0844, #ffb199, #4facfe, #00f2fe, #ff0844);
+            background-size: 300% auto; color: transparent; -webkit-background-clip: text;
+            animation: shineText 4s linear infinite;
+        }
+        @keyframes shineText { to { background-position: 300% center; } }
+
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        
+        .user-avatar {
+            width: 45px; height: 45px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-head); font-weight: 900; font-size: 20px; color: #fff;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            border: 1.5px solid var(--glass-border); box-shadow: 0 5px 20px rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px); cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+        }
+        .user-avatar:active { transform: scale(0.85); box-shadow: 0 0 25px var(--primary); border-color: var(--primary); }
+
+        .search-container { padding: 20px; position: relative; z-index: 10; }
+        .search-box {
+            width: 100%; display: flex; align-items: center;
+            background: var(--glass-white); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 14px 20px; backdrop-filter: blur(12px); transition: all 0.3s;
+        }
+        .search-box:focus-within { background: rgba(255,255,255,0.12); border-color: var(--primary); box-shadow: 0 0 25px rgba(0, 242, 254, 0.2); }
+        .search-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 16px; padding-left: 15px; }
+        
+        .app-container { padding: 0 20px 120px 20px; display: flex; flex-direction: column; gap: 20px; min-height: 50vh; }
+        
+        .app-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.4));
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px;
+            display: flex; align-items: center; gap: 15px; position: relative; overflow: hidden;
+            backdrop-filter: blur(25px); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        .app-card.top-app {
+            background: linear-gradient(145deg, rgba(255, 193, 7, 0.08), rgba(255, 8, 68, 0.05));
+            border: 1px solid rgba(255, 193, 7, 0.3); box-shadow: 0 10px 30px rgba(255, 193, 7, 0.15);
+        }
+        .trending-badge {
+            position: absolute; top: 0; right: 0; background: linear-gradient(45deg, #ff0844, #ffb199);
+            color: #fff; font-size: 10px; font-weight: 800; padding: 5px 12px;
+            border-bottom-left-radius: 15px; box-shadow: -2px 2px 10px rgba(255,8,68,0.4);
+            display: flex; align-items: center; gap: 5px; z-index: 3; font-family: var(--font-head);
+        }
+
+        .app-icon { width: 75px; height: 75px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); }
+        .app-details { flex: 1; z-index: 2; position: relative; }
+        .app-name { font-family: var(--font-head); font-size: 19px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+        
+        .action-btns { display: flex; gap: 10px; margin-top: 12px; }
+        .btn {
+            flex: 1; padding: 12px; border-radius: 14px; border: none; font-family: var(--font-body);
+            font-weight: 700; font-size: 14px; color: #fff; cursor: pointer;
+            position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.3s ease; text-decoration: none; z-index: 2;
+        }
+        .btn:active { transform: scale(0.92); }
+        
+        .btn-study { background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px solid var(--glass-border); color: #fff; }
+        .btn-download { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 5px 20px rgba(67, 233, 123, 0.3); color: #000; }
+        .btn-locked { background: linear-gradient(45deg, #ff0844, #ffb199); box-shadow: 0 5px 20px rgba(255, 8, 68, 0.3); color: #fff; }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(25px);
+            border-top: 1px solid var(--glass-border); padding: 15px 30px;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 100; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); padding-bottom: env(safe-area-inset-bottom, 15px);
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .nav-item i { font-size: 24px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active i { transform: translateY(-5px); text-shadow: 0 5px 15px rgba(0,242,254,0.5); }
+
+        .bottom-sheet-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(15px); z-index: 1000;
+            opacity: 0; visibility: hidden; transition: 0.4s; display: flex; align-items: flex-end;
+        }
+        .bottom-sheet {
+            width: 100%; background: linear-gradient(180deg, rgba(30,30,40,0.95) 0%, rgba(15,15,20,0.98) 100%);
+            border-radius: 35px 35px 0 0; padding: 30px 25px 40px 25px;
+            transform: translateY(100%); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border-top: 1px solid rgba(255,255,255,0.2); box-shadow: 0 -20px 60px rgba(0,0,0,0.9);
+            max-height: 90vh; overflow-y: auto; backdrop-filter: blur(20px);
+        }
+        .bottom-sheet-overlay.active { opacity: 1; visibility: visible; }
+        .bottom-sheet-overlay.active .bottom-sheet { transform: translateY(0); }
+
+        .sheet-handle { width: 60px; height: 6px; background: rgba(255,255,255,0.3); border-radius: 10px; margin: 0 auto 30px auto; }
+        .modal-title { font-family: var(--font-head); font-size: 24px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; color:#fff; }
+        
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-field {
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
+            color: #fff; padding: 18px 20px; border-radius: 18px; font-size: 16px; 
+            outline: none; transition: 0.3s; font-family: var(--font-body);
+        }
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); background: rgba(0,0,0,0.7); }
+
+        .admin-tabs { display: flex; background: rgba(255,255,255,0.05); border-radius: 15px; padding: 5px; margin-bottom: 25px; }
+        .admin-tab { flex: 1; text-align: center; padding: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 12px; transition: 0.3s; }
+        .admin-tab.active { background: var(--primary); color: #000; box-shadow: 0 5px 15px rgba(0,242,254,0.3); }
+
+        .manage-list { display: flex; flex-direction: column; gap: 15px; }
+        .manage-item {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 15px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .manage-header { display: flex; justify-content: space-between; align-items: center; }
+        .manage-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .m-btn { padding: 10px; border-radius: 10px; border: none; font-weight: 700; color: #fff; font-size: 12px; display:flex; align-items:center; justify-content:center; gap:5px; cursor:pointer;}
+        .m-edit { background: #4facfe; } .m-delete { background: #ff0844; } .m-top { background: #ffc107; color:#000; } .m-lock { background: #8e2de2; }
+
+        .checkbox-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        .custom-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: var(--primary); }
+
+        .profile-header { text-align: center; margin-bottom: 30px; }
+        .profile-avatar-large {
+            width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px auto;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px; font-weight: 900; font-family: var(--font-head);
+            box-shadow: 0 10px 30px rgba(0,242,254,0.4); border: 3px solid rgba(255,255,255,0.2); text-transform: uppercase;
+        }
+        .status-box {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; text-align: center;
+        }
+
+        .toast-container {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150px);
+            background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid var(--primary); padding: 16px 30px; border-radius: 50px;
+            color: #fff; font-weight: 700; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.3); z-index: 9999;
+            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); font-family: var(--font-head);
+        }
+        .toast-container.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-ring"></div>
+        <div style="margin-top:20px; font-family:var(--font-head); font-weight:700; color:#fff; letter-spacing:2px;">HRRY.ONLINE</div>
+    </div>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <div class="profile-avatar-large" style="width:70px;height:70px;font-size:30px;margin-bottom:20px;background:linear-gradient(45deg,#ff0844,#ffb199);"><i class="fas fa-user"></i></div>
+            <h2 style="font-family:var(--font-head); margin-bottom:10px;">Welcome to Store</h2>
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:25px;">Enter your name to setup your premium profile.</p>
+            <input type="text" id="setupName" class="input-field" placeholder="Your Full Name..." style="margin-bottom:20px; text-align:center;">
+            <button class="btn btn-download ripple-target" style="width:100%; padding:16px; font-size:18px; border-radius:18px;" onclick="saveUserName()">
+                Create Profile <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="animated-bg">
+        <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+    </div>
+
+    <header>
+        <div class="brand-name">hrry.online</div>
+        <div class="header-actions">
+            <div id="userAvatar" class="user-avatar ripple-target" onclick="openProfile()">?</div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search" style="color: var(--text-muted); font-size: 18px;"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search premium & top apps..." onkeyup="filterApps()">
+        </div>
+    </div>
+
+    <div class="app-container" id="appList">
+        <div style="text-align:center; padding: 60px 20px; color: var(--primary);">
+            <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+            <p style="margin-top:20px; font-weight: 600;">Syncing Core Server...</p>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="window.scrollTo(0,0)">
+            <i class="fas fa-compass"></i><span>Discover</span>
+        </div>
+        <div class="nav-item" onclick="openAdminRouter()">
+            <i class="fas fa-shield-alt"></i><span>Admin</span>
+        </div>
+    </nav>
+
+    <div class="bottom-sheet-overlay" id="profileSheet" onclick="closeSheetOnBgClick(event, 'profileSheet')">
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <div class="profile-header">
+                <div id="sheetAvatar" class="profile-avatar-large">?</div>
+                <h2 id="sheetUserName" style="font-family:var(--font-head); font-size:26px;">User Name</h2>
+                <p style="color:var(--text-muted); font-size:14px;">Premium Member</p>
+            </div>
+            <div class="status-box" id="keyStatusBox"></div>
+            <div id="keyEntryArea" style="margin-top: 25px;">
+                <p style="color:var(--danger-light); font-size:13px; margin-bottom:10px; font-weight:600; text-align:center;"><i class="fas fa-lock"></i> 4-Digit Access Key Required</p>
+                <div class="input-group" style="display:flex; gap: 12px;">
+                    <input type="number" id="userKey" class="input-field" placeholder="Enter 4-digit Key..." oninput="handleKeyInput(event)" style="text-align:center; font-size:20px; font-weight:800; letter-spacing:5px;">
+                    <button class="btn btn-study ripple-target" style="padding: 0 25px; border-radius:18px;" onclick="pasteKey()"><i class="fas fa-paste"></i></button>
+                </div>
+                <button class="btn btn-study ripple-target" style="width: 100%; padding: 18px; margin-top: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); box-shadow: none;" onclick="genKey()">
+                    <i class="fas fa-key"></i> Generate Free Key
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-sheet-overlay" id="loginSheet" onclick="closeSheetOnBgClick(event, 'loginSheet')">
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <h2 class="modal-title" style="color: var(--primary);"><i class="fas fa-fingerprint"></i> System Admin</h2>
+            <div class="input-group">
+                <input type="password" id="adminPin" class="input-field" placeholder="Enter PIN">
+            </div>
+            <button class="btn btn-study ripple-target" style="width: 100%; padding: 18px; font-size: 18px; border-radius: 18px;" onclick="verifyAdmin()">
+                Authenticate <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="bottom-sheet-overlay" id="adminPanelSheet" onclick="closeSheetOnBgClick(event, 'adminPanelSheet')">
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <h2 class="modal-title" style="margin-bottom:0;"><i class="fas fa-cogs"></i> Publisher Panel</h2>
+                <button onclick="logoutAdmin()" style="background:transparent; border:none; color:var(--danger); font-size:16px; font-weight:bold; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+            
+            <div class="admin-tabs">
+                <div class="admin-tab active" id="tabPublish" onclick="switchAdminTab('publish')">Publish App</div>
+                <div class="admin-tab" id="tabManage" onclick="switchAdminTab('manage')">Manage Apps</div>
+            </div>
+
+            <div id="sectionPublish">
+                <div class="input-group"><input type="text" id="appName" class="input-field" placeholder="App Name (e.g. Pro Editor)"></div>
+                <div class="input-group"><input type="text" id="appLogo" class="input-field" placeholder="Logo Image URL (.png/.jpg)"></div>
+                <div class="input-group"><input type="text" id="studyUrl" class="input-field" placeholder="Study/Info Web URL"></div>
+                <div class="input-group"><input type="text" id="downloadUrl" class="input-field" placeholder="Direct Download URL (APK/ZIP)"></div>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="isLocked" class="custom-checkbox">
+                    <label style="font-weight: 600; cursor: pointer;" for="isLocked">Protect App with Access Key</label>
+                </div>
+                <div class="checkbox-wrapper" style="margin-top:-10px;">
+                    <input type="checkbox" id="isTop" class="custom-checkbox">
+                    <label style="font-weight: 600; cursor: pointer; color:var(--warning);" for="isTop">Set as Top/Trending App</label>
+                </div>
+                <button class="btn btn-download ripple-target" style="width: 100%; padding: 18px; font-size: 18px;" onclick="publishApp()">
+                    <i class="fas fa-cloud-upload-alt"></i> Deploy App
+                </button>
+            </div>
+
+            <div id="sectionManage" style="display:none; max-height: 50vh; overflow-y:auto; padding-right:5px;">
+                <div class="manage-list" id="adminManageList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast">
+        <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
+        <span id="toastMsg">Success!</span>
+    </div>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://hrry-store-default-rtdb.firebaseio.com/" };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
+        let globalAppsData = [];
+        let pendingDownloadUrl = "";
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.display = 'none', 800);
+                checkFirstTimeUser();
+                loadApps();
+            }, 1200); 
+        });
+
+        function checkFirstTimeUser() {
+            const userName = localStorage.getItem('hrry_user_name');
+            if(!userName) {
+                document.getElementById('loginOverlay').classList.add('active');
+            } else {
+                updateAvatarUI(userName);
+            }
+        }
+
+        function saveUserName() {
+            const nameInput = document.getElementById('setupName').value.trim();
+            if(nameInput.length < 2) {
+                showToast("Please enter a valid name", "error");
+                return;
+            }
+            localStorage.setItem('hrry_user_name', nameInput);
+            updateAvatarUI(nameInput);
+            document.getElementById('loginOverlay').classList.remove('active');
+            showToast("Profile Created Successfully!");
+        }
+
+        function updateAvatarUI(name) {
+            const letter = name.charAt(0).toUpperCase();
+            document.getElementById('userAvatar').innerText = letter;
+            document.getElementById('sheetAvatar').innerText = letter;
+            document.getElementById('sheetUserName').innerText = name;
+        }
+
+        function openProfile() {
+            updateKeyStatusUI();
+            openSheet('profileSheet');
+        }
+
+        function loadApps() {
+            db.ref('apps').on('value', (snapshot) => {
+                const data = snapshot.val();
+                globalAppsData = [];
+                
+                if(data) {
+                    Object.keys(data).forEach(key => {
+                        globalAppsData.push({ id: key, ...data[key] });
+                    });
+                    
+                    globalAppsData.sort((a, b) => {
+                        const aTop = Boolean(a.isTop);
+                        const bTop = Boolean(b.isTop);
+                        if(aTop && !bTop) return -1;
+                        if(!aTop && bTop) return 1;
+                        return (Number(b.timestamp) || 0) - (Number(a.timestamp) || 0);
+                    });
+                }
+                renderAppsToClient();
+                renderManageApps();
+            });
+        }
+
+        function renderAppsToClient() {
+            const list = document.getElementById('appList');
+            list.innerHTML = '';
+            
+            if(globalAppsData.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding: 50px; color:#888;"><i class="fas fa-box-open fa-3x" style="margin-bottom:15px; opacity:0.5;"></i><p>No apps deployed yet.</p></div>';
+                return;
+            }
+
+            globalAppsData.forEach((app, index) => {
+                const isLocked = Boolean(app.isLocked);
+                const isTop = Boolean(app.isTop);
+                const btnClass = isLocked ? 'btn-locked' : 'btn-download';
+                const btnIcon = isLocked ? 'fa-lock' : 'fa-download';
+                const topClass = isTop ? 'top-app' : '';
+                const trendingBadge = isTop ? `<div class="trending-badge"><i class="fas fa-fire"></i> TRENDING</div>` : '';
+
+                const appName = app.name || "Unknown App";
+                const appLogo = app.logo || "https://via.placeholder.com/150/111/FFF?text=IMG";
+                const studyUrl = app.studyUrl || "#";
+                const downloadUrl = app.downloadUrl || "#";
+
+                const cardHTML = `
+                    <div class="app-card search-target ${topClass}" style="animation-delay: ${index * 0.05}s" data-name="${appName.toLowerCase()}">
+                        ${trendingBadge}
+                        <img src="${appLogo}" class="app-icon" onerror="this.src='https://via.placeholder.com/150/111/FFF?text=IMG'">
+                        <div class="app-details">
+                            <div class="app-name">${appName}</div>
+                            <div style="font-size: 13px; color: var(--text-muted); display:flex; gap:10px; align-items:center;">
+                                <span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:6px; font-size:10px; border:1px solid rgba(255,255,255,0.2);">PRO</span>
+                                <span><i class="fas fa-star" style="color:var(--warning)"></i> 4.9</span>
+                            </div>
+                            <div class="action-btns">
+                                <a href="${studyUrl}" target="_blank" class="btn btn-study ripple-target">
+                                    <i class="fas fa-book-reader"></i> Study
+                                </a>
+                                <button class="btn ${btnClass} ripple-target btn-action-dl" onclick="handleDownloadRequest(this, '${downloadUrl}', ${isLocked})">
+                                    <i class="fas ${btnIcon}"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.insertAdjacentHTML('beforeend', cardHTML);
+            });
+            attachRippleEffect();
+        }
+
+        // --- DIRECT INSTANT DOWNLOAD (NO STATUS/PROGRESS BAR) ---
+        function handleDownloadRequest(btnElement, url, isLocked) {
+            if(url === "#" || !url) {
+                showToast("Download URL is broken or missing!", "error");
+                return;
+            }
+
+            if(!isLocked) {
+                window.location.href = url;
+                return;
+            }
+            
+            const expiry = localStorage.getItem('hrry_premium_key_exp');
+            if(expiry && Date.now() < parseInt(expiry)) {
+                window.location.href = url;
+            } else {
+                pendingDownloadUrl = url;
+                openProfile();
+                showToast("Premium Key Required to Download", "error");
+            }
+        }
+
+        function updateKeyStatusUI() {
+            const box = document.getElementById('keyStatusBox');
+            const entryArea = document.getElementById('keyEntryArea');
+            const expiry = localStorage.getItem('hrry_premium_key_exp');
+            
+            if(expiry && Date.now() < parseInt(expiry)) {
+                box.innerHTML = `<i class="fas fa-shield-check" style="font-size:30px; color:var(--success); margin-bottom:10px;"></i>
+                                 <h3 style="color:var(--success);">Premium Active</h3>
+                                 <p style="font-size:12px; color:var(--text-muted);">Access granted for 24 Hours.</p>`;
+                box.style.borderColor = "var(--success)";
+                entryArea.style.display = "none";
+            } else {
+                box.innerHTML = `<i class="fas fa-lock" style="font-size:30px; color:var(--danger); margin-bottom:10px;"></i>
+                                 <h3 style="color:var(--danger);">No Active Key</h3>
+                                 <p style="font-size:12px; color:var(--text-muted);">Generate a new key to unlock apps.</p>`;
+                box.style.borderColor = "var(--danger)";
+                entryArea.style.display = "block";
+                document.getElementById('userKey').value = '';
+            }
+        }
+
+        function genKey() { window.open('https://vplink.in/hrryKeyGen', '_blank'); }
+
+        async function pasteKey() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const keyInput = document.getElementById('userKey');
+                keyInput.value = text.trim();
+                handleKeyInput({ target: keyInput }); 
+            } catch (err) {
+                showToast("Clipboard access denied", "error");
+            }
+        }
+
+        function handleKeyInput(e) {
+            const val = e.target.value.trim();
+            if(val.length === 4) {
+                verifyKeyProcess(val);
+            }
+        }
+
+        function verifyKeyProcess(keyVal) {
+            document.getElementById('userKey').blur(); 
+            const box = document.getElementById('keyStatusBox');
+            box.innerHTML = `<i class="fas fa-check-circle" style="font-size:40px; color:var(--success); margin-bottom:10px;"></i>
+                             <h2 style="color:var(--success); font-family:var(--font-head);">Key Accepted!</h2>`;
+            document.getElementById('keyEntryArea').style.display = "none";
+            
+            localStorage.setItem('hrry_premium_key_exp', Date.now() + 86400000); 
+            showToast("24H Premium Unlocked!", "success");
+
+            setTimeout(() => {
+                closeSheet('profileSheet');
+                if(pendingDownloadUrl !== "") {
+                    const urlToOpen = pendingDownloadUrl;
+                    pendingDownloadUrl = "";
+                    showToast("Starting Download...", "success");
+                    setTimeout(()=> { window.location.href = urlToOpen; }, 1000);
+                }
+            }, 1500);
+        }
+
+        function openAdminRouter() {
+            const isAuth = localStorage.getItem('hrry_admin_auth');
+            if(isAuth === 'true') {
+                openSheet('adminPanelSheet');
+                switchAdminTab('manage');
+            } else {
+                openSheet('loginSheet');
+            }
+        }
+
+        function verifyAdmin() {
+            if(document.getElementById('adminPin').value === "7370") {
+                closeSheet('loginSheet');
+                document.getElementById('adminPin').value = '';
+                localStorage.setItem('hrry_admin_auth', 'true');
+                showToast("System Admin Access Granted");
+                setTimeout(() => openSheet('adminPanelSheet'), 400);
+            } else {
+                showToast("Security Breach: Invalid PIN!", "error");
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('hrry_admin_auth');
+            closeSheet('adminPanelSheet');
+            showToast("Admin Logged Out Successfully");
+        }
+
+        function switchAdminTab(tab) {
+            document.getElementById('tabPublish').classList.remove('active');
+            document.getElementById('tabManage').classList.remove('active');
+            document.getElementById('sectionPublish').style.display = 'none';
+            document.getElementById('sectionManage').style.display = 'none';
+
+            if(tab === 'publish') {
+                document.getElementById('tabPublish').classList.add('active');
+                document.getElementById('sectionPublish').style.display = 'block';
+            } else {
+                document.getElementById('tabManage').classList.add('active');
+                document.getElementById('sectionManage').style.display = 'block';
+                renderManageApps();
+            }
+        }
+
+        function publishApp() {
+            const data = {
+                name: document.getElementById('appName').value.trim(),
+                logo: document.getElementById('appLogo').value.trim(),
+                studyUrl: document.getElementById('studyUrl').value.trim(),
+                downloadUrl: document.getElementById('downloadUrl').value.trim(),
+                isLocked: document.getElementById('isLocked').checked,
+                isTop: document.getElementById('isTop').checked,
+                timestamp: Date.now()
+            };
+
+            if(!data.name || !data.logo || !data.downloadUrl) {
+                showToast("Fill required fields!", "error"); return;
+            }
+
+            db.ref('apps').push(data).then(() => {
+                showToast("App Deployed to Server!");
+                document.getElementById('appName').value = ''; document.getElementById('appLogo').value = '';
+                document.getElementById('studyUrl').value = ''; document.getElementById('downloadUrl').value = '';
+                document.getElementById('isLocked').checked = false; document.getElementById('isTop').checked = false;
+                switchAdminTab('manage');
+            });
+        }
+
+        function renderManageApps() {
+            const list = document.getElementById('adminManageList');
+            list.innerHTML = '';
+            
+            globalAppsData.forEach(app => {
+                const lockIcon = app.isLocked ? 'fa-lock' : 'fa-unlock';
+                const lockText = app.isLocked ? 'Locked' : 'Unlocked';
+                const topIcon = app.isTop ? 'fa-fire' : 'fa-arrow-up';
+                const topText = app.isTop ? 'Remove Top' : 'Make Top';
+                const appName = app.name || "Unknown";
+
+                list.insertAdjacentHTML('beforeend', `
+                    <div class="manage-item">
+                        <div class="manage-header">
+                            <strong style="font-family:var(--font-head); font-size:16px;">${appName}</strong>
+                            ${app.isTop ? '<span style="color:var(--warning); font-size:12px;"><i class="fas fa-fire"></i></span>' : ''}
+                        </div>
+                        <div class="manage-actions">
+                            <button class="m-btn m-edit ripple-target" onclick="adminEditApp('${app.id}')"><i class="fas fa-pen"></i> Edit</button>
+                            <button class="m-btn m-lock ripple-target" onclick="adminToggleState('${app.id}', 'isLocked', ${!app.isLocked})"><i class="fas ${lockIcon}"></i> ${lockText}</button>
+                            <button class="m-btn m-top ripple-target" onclick="adminToggleState('${app.id}', 'isTop', ${!app.isTop})"><i class="fas ${topIcon}"></i> ${topText}</button>
+                            <button class="m-btn m-delete ripple-target" onclick="adminDeleteApp('${app.id}')"><i class="fas fa-trash"></i> Trash</button>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        function adminToggleState(id, key, newValue) {
+            let updates = {};
+            updates[key] = newValue;
+            db.ref('apps/' + id).update(updates).then(() => showToast("Status Updated"));
+        }
+
+        function adminDeleteApp(id) {
+            if(confirm("Permanently delete this app?")) {
+                db.ref('apps/' + id).remove().then(() => showToast("App Deleted", "error"));
+            }
+        }
+
+        function adminEditApp(id) {
+            const app = globalAppsData.find(a => a.id === id);
+            if(!app) return;
+
+            const newName = prompt("Edit App Name:", app.name || "");
+            if(newName === null) return; 
+            const newLogo = prompt("Edit Logo URL:", app.logo || "");
+            if(newLogo === null) return; 
+            const newStudy = prompt("Edit Study/Web URL:", app.studyUrl || "");
+            if(newStudy === null) return; 
+            const newDl = prompt("Edit Download URL:", app.downloadUrl || "");
+            if(newDl === null) return; 
+
+            db.ref('apps/' + id).update({
+                name: newName,
+                logo: newLogo,
+                studyUrl: newStudy,
+                downloadUrl: newDl
+            }).then(() => showToast("App Information Updated Successfully!"));
+        }
+
+        function filterApps() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.search-target').forEach(card => {
+                card.style.display = card.getAttribute('data-name').includes(query) ? "flex" : "none";
+            });
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            document.getElementById('toastMsg').innerText = msg;
+            
+            if(type === 'error') {
+                icon.className = 'fas fa-exclamation-triangle toast-icon'; icon.style.color = 'var(--danger)';
+                toast.style.borderColor = 'var(--danger)';
+            } else {
+                icon.className = 'fas fa-check-circle toast-icon'; icon.style.color = 'var(--primary)';
+                toast.style.borderColor = 'var(--primary)';
+            }
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        function openSheet(id) { document.getElementById(id).classList.add('active'); }
+        function closeSheet(id) { document.getElementById(id).classList.remove('active'); }
+        function closeSheetOnBgClick(e, id) { if(e.target.id === id) closeSheet(id); }
+
+        function attachRippleEffect() {
+            document.querySelectorAll('.ripple-target').forEach(btn => {
+                btn.onmousedown = btn.ontouchstart = function(e) {
+                    let rect = btn.getBoundingClientRect();
+                    let x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                    let y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+                    let ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    ripple.style.position = 'absolute'; ripple.style.background = 'rgba(255,255,255,0.4)';
+                    ripple.style.borderRadius = '50%'; ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple-anim 0.6s linear'; ripple.style.pointerEvents = 'none';
+                    ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
+                    
+                    if(!document.getElementById('rippleStyle')) {
+                        const style = document.createElement('style'); style.id = 'rippleStyle';
+                        style.innerHTML = `@keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }`;
+                        document.head.appendChild(style);
+                    }
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
