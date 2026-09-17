@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070d">
+<title>Hrry TV</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--bg:#03050a;--card:rgba(15,19,29,.72);--card2:rgba(20,25,38,.82);--line:rgba(255,255,255,.09);--text:#f8fafc;--muted:#8791a5;--a:#6d5cff;--b:#20d8ff;--pink:#ff4f91}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#03050a;color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-25%;z-index:-2;background:radial-gradient(circle at 18% 12%,rgba(109,92,255,.24),transparent 25%),radial-gradient(circle at 85% 18%,rgba(32,216,255,.14),transparent 23%),radial-gradient(circle at 55% 90%,rgba(255,79,145,.10),transparent 28%);filter:blur(12px);pointer-events:none}
+body:after{content:"";position:fixed;inset:0;z-index:-1;opacity:.22;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000,transparent 90%);pointer-events:none}
+button,input{font:inherit}button{cursor:pointer;color:inherit}
+.app{min-height:100vh}
+header{position:sticky;top:0;z-index:30;height:74px;padding:0 clamp(12px,3vw,34px);display:flex;align-items:center;justify-content:space-between;background:rgba(3,5,10,.62);backdrop-filter:blur(24px) saturate(150%);border-bottom:1px solid rgba(255,255,255,.07)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.8px;font-size:18px}.brand-dot{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,#7567ff,#20d8ff);box-shadow:0 0 35px rgba(90,104,255,.35);transform:rotate(-4deg)}.brand small{display:block;color:#7f8ba0;font-size:8px;letter-spacing:1.5px;margin-top:3px;font-weight:700}
+.actions{display:flex;gap:8px}.icon-btn,.pill{border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:13px;min-height:42px;padding:0 13px;transition:.2s;backdrop-filter:blur(12px)}.icon-btn{width:42px;padding:0;font-size:18px}.icon-btn:hover,.pill:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.18);transform:translateY(-1px)}
+main{width:min(1480px,100%);margin:auto;padding:22px clamp(12px,3vw,30px) 90px}
+.hero{min-height:430px;border:1px solid var(--line);border-radius:32px;overflow:hidden;position:relative;display:grid;place-items:center;margin-bottom:20px;background:linear-gradient(145deg,rgba(15,18,31,.88),rgba(5,8,15,.88));box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.hero:before{content:"";position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(80,83,255,.23),transparent 65%);filter:blur(20px);animation:pulse 5s ease-in-out infinite}
+.hero-copy{position:absolute;z-index:3;top:34px;left:20px;right:20px;text-align:center}.hero-copy h1{margin:0;font-size:clamp(27px,5vw,54px);line-height:1.02;letter-spacing:-2.4px;background:linear-gradient(90deg,#fff,#a9b6ff 48%,#69e4ff);-webkit-background-clip:text;color:transparent}.hero-copy p{margin:11px auto 0;color:#8994a9;font-size:12px;max-width:510px}
+.globe{width:min(270px,58vw);aspect-ratio:1;border-radius:50%;position:relative;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.7),transparent 5%),radial-gradient(circle at 34% 32%,#4c80ff 0,#2838c9 34%,#10146c 61%,#030520 100%);box-shadow:inset -45px -30px 80px #000a,0 0 100px rgba(75,95,255,.30);animation:float 5s ease-in-out infinite}.globe:before,.globe:after{content:"";position:absolute;inset:9%;border:1px solid rgba(164,213,255,.23);border-radius:50%;transform:rotate(24deg) scaleX(.38)}.globe:after{transform:rotate(-24deg) scaleX(.56)}.orbit{position:absolute;inset:-9%;border:1px solid rgba(99,214,255,.25);border-radius:50%;transform:rotate(-18deg)}.globe-label{position:absolute;bottom:28px;left:0;right:0;text-align:center;font-weight:800;font-size:11px;letter-spacing:2px;color:#d9e3ff}@keyframes float{50%{transform:translateY(-9px) scale(1.015)}}@keyframes pulse{50%{transform:scale(1.15);opacity:.7}}
+.toolbar{display:flex;gap:9px;align-items:center;margin:18px 0 13px;flex-wrap:wrap}.search{flex:1;min-width:210px}.search input{width:100%;height:50px;border:1px solid var(--line);background:rgba(10,14,23,.76);color:var(--text);border-radius:16px;padding:0 17px;outline:none;box-shadow:inset 0 1px rgba(255,255,255,.025)}.search input:focus{border-color:rgba(109,92,255,.65);box-shadow:0 0 0 4px rgba(109,92,255,.10)}
+.status{color:#68748a;font-size:11px;margin:5px 3px 16px}.country-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px}
+.country{min-height:112px;text-align:left;padding:15px;border-radius:19px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(17,22,34,.78),rgba(8,11,18,.78));color:var(--text);transition:.25s;position:relative;overflow:hidden}.country:after{content:"›";position:absolute;right:14px;bottom:11px;color:#59657a;font-size:20px}.country:hover{transform:translateY(-4px);border-color:rgba(109,92,255,.42);box-shadow:0 16px 35px rgba(0,0,0,.28)}.flag{font-size:29px;filter:drop-shadow(0 5px 12px #000)}.country strong{display:block;margin-top:9px;font-size:13px}.country span{display:block;color:#69758b;font-size:9px;margin-top:4px;letter-spacing:1px}
+.channels-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:5px 0 16px}.channels-head h2{font-size:22px;margin:0;letter-spacing:-.7px}.channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:13px}
+.channel{border:1px solid var(--line);background:linear-gradient(145deg,rgba(16,21,32,.86),rgba(8,11,18,.92));border-radius:19px;overflow:hidden;color:var(--text);text-align:left;padding:0;transition:.25s}.channel:hover{transform:translateY(-4px);border-color:rgba(32,216,255,.32);box-shadow:0 18px 42px rgba(0,0,0,.32)}.logo-box{height:118px;background:radial-gradient(circle at 50% 45%,rgba(85,99,255,.12),transparent 55%),#070a11;display:grid;place-items:center;padding:18px}.logo-box img{max-width:82%;max-height:70px;object-fit:contain;filter:drop-shadow(0 5px 16px rgba(0,0,0,.35))}.fallback-logo{width:58px;height:58px;border-radius:17px;background:linear-gradient(135deg,#20284a,#101521);display:grid;place-items:center;font-size:20px;font-weight:800;color:#aebcff}.ch-info{padding:12px 13px 14px}.ch-name{font-weight:750;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ch-meta{font-size:9px;color:#707c91;margin-top:6px;text-transform:uppercase;letter-spacing:.6px}
+.empty{padding:48px 15px;text-align:center;color:#7d889b;border:1px dashed #273044;border-radius:18px;background:rgba(9,12,19,.5)}.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(18px);z-index:50;display:none;align-items:center;justify-content:center;padding:12px}.modal.open{display:flex}.player{width:min(1080px,100%);background:#080b12;border:1px solid #2a3345;border-radius:22px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.7)}.player-top{height:62px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.player-title{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px}.video-wrap{background:#000;aspect-ratio:16/9;display:grid;place-items:center;position:relative}video{width:100%;height:100%;display:block;background:#000}.player-msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:25px;color:#aab5c7;background:linear-gradient(transparent,#000)}.player-msg div{max-width:500px}.player-msg b{display:block;color:#fff;margin-bottom:8px}.player-bottom{padding:12px;display:flex;gap:8px;flex-wrap:wrap}.spinner{width:32px;height:32px;border:3px solid #303a4b;border-top-color:var(--a);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;z-index:100;background:#111722;border:1px solid #303a4b;color:#fff;padding:11px 15px;border-radius:13px;transition:.25s;font-size:12px;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%)}@media(max-width:600px){header{height:64px}.brand-dot{width:37px;height:37px}.brand{font-size:16px}.hero{min-height:360px;border-radius:25px}.hero-copy{top:26px}.hero-copy h1{font-size:29px}.country-grid{grid-template-columns:repeat(2,1fr)}.country{min-height:105px}.channels{grid-template-columns:repeat(2,1fr)}.logo-box{height:92px}.ch-info{padding:10px}.ch-name{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="brand-dot">🌐</div>
+    <div>Hrry TV<small>LIVE CHANNELS FROM AROUND THE WORLD</small></div>
+  </div>
+  <div class="actions">
+    <button class="icon-btn" id="homeBtn" title="Countries">⌂</button>
+    <button class="icon-btn" id="favBtn" title="Favorites">♡</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <h1>Hrry TV — World Channels</h1>
+      <p>Explore live TV channels from countries around the world.</p>
+    </div>
+    <div class="globe"><div class="orbit"></div><div class="globe-label">🌍 HRRY TV</div></div>
+  </section>
+
+  <div class="toolbar">
+    <div class="search"><input id="search" autocomplete="off" placeholder="Search country or channel…"></div>
+    <button class="pill" id="randomBtn">🎲 Random</button>
+    <button class="pill" id="refreshBtn">↻ Refresh</button>
+  </div>
+
+  <div id="status" class="status">Loading countries…</div>
+  <section id="countries" class="country-grid"></section>
+
+  <section id="channelView" class="hidden">
+    <div class="channels-head">
+      <h2 id="countryTitle">Channels</h2>
+      <button class="pill" id="backBtn">← Countries</button>
+    </div>
+    <div id="channels" class="channels"></div>
+  </section>
+</main>
+</div>
+
+<div class="modal" id="modal">
+  <div class="player">
+    <div class="player-top">
+      <div class="player-title" id="playerTitle">Live TV</div>
+      <button class="icon-btn" id="closeBtn">×</button>
+    </div>
+    <div class="video-wrap">
+      <video id="video" controls playsinline autoplay></video>
+      <div class="player-msg hidden" id="playerMsg"><div></div></div>
+    </div>
+    <div class="player-bottom">
+      <button class="pill" id="openStream">Open stream</button>
+      <button class="pill" id="favChannel">♡ Favorite</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API="https://iptv-org.github.io/api";
+const PLAYLIST="https://iptv-org.github.io/iptv/countries/";
+const LOGO="https://iptv-org.github.io/api/logos.json";
+
+let countries=[];
+let channels=[];
+let currentCountry=null;
+let currentChannel=null;
+let hls=null;
+let logoMap=new Map();
+let favorites=new Set(JSON.parse(localStorage.getItem("worldtv:favorites")||"[]"));
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function toast(t){
+  const el=$("#toast");el.textContent=t;el.classList.add("show");
+  clearTimeout(window.__toast);window.__toast=setTimeout(()=>el.classList.remove("show"),2200);
+}
+function setStatus(t){$("#status").textContent=t}
+
+async function getJSON(url){
+  const r=await fetch(url,{cache:"no-store"});
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+
+async function init(){
+  try{
+    countries=await getJSON(API+"/countries.json");
+    countries.sort((a,b)=>a.name.localeCompare(b.name));
+    renderCountries(countries);
+    setStatus(`${countries.length} countries available • public channel data`);
+    // Logos are optional; failure must never block the app.
+    getJSON(LOGO).then(list=>{
+      for(const x of list||[]) if(x.channel && x.url && x.in_use!==false) logoMap.set(x.channel,x.url);
+      if(channels.length) renderChannels(channels);
+    }).catch(()=>{});
+  }catch(e){
+    setStatus("Could not load country data. Check your internet connection and tap Refresh.");
+    $("#countries").innerHTML='<div class="empty">Country data could not be loaded.</div>';
+  }
+}
+
+function renderCountries(list){
+  const box=$("#countries");
+  box.innerHTML=list.map(c=>`
+    <button class="country" data-code="${esc(c.code)}">
+      <div class="flag">${c.flag||"🌐"}</div>
+      <strong>${esc(c.name)}</strong>
+      <span>${esc(c.code)}</span>
+    </button>`).join("") || '<div class="empty">No country found.</div>';
+  box.querySelectorAll(".country").forEach(b=>b.onclick=()=>loadCountry(b.dataset.code));
+}
+
+async function loadCountry(code){
+  const c=countries.find(x=>x.code===code); if(!c)return;
+  currentCountry=c;
+  $("#countries").classList.add("hidden");
+  $("#channelView").classList.remove("hidden");
+  $("#countryTitle").textContent=`${c.flag||"🌐"} ${c.name}`;
+  $("#channels").innerHTML='<div class="empty"><div class="spinner" style="margin:auto"></div><br>Loading channels…</div>';
+  setStatus(`Loading ${c.name}…`);
+  try{
+    const text=await (await fetch(PLAYLIST+c.code.toLowerCase()+".m3u",{cache:"no-store"})).text();
+    channels=parseM3U(text);
+    renderChannels(channels);
+    setStatus(`${channels.length} channel entries • ${c.name}`);
+  }catch(e){
+    channels=[];
+    $("#channels").innerHTML='<div class="empty">No playlist could be loaded for this country.</div>';
+    setStatus(`Could not load ${c.name}`);
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function parseM3U(text){
+  const lines=text.split(/\r?\n/), out=[];
+  let info=null;
+  for(const line of lines){
+    if(line.startsWith("#EXTINF:")){
+      const attrs={};
+      for(const m of line.matchAll(/([\\w-]+)="([^"]*)"/g)) attrs[m[1]]=m[2];
+      const name=line.split(",").slice(1).join(",").trim()||attrs["tvg-name"]||"Channel";
+      info={name,attrs};
+    }else if(line.trim() && !line.startsWith("#") && info){
+      out.push({name:info.name,url:line.trim(),id:info.attrs["tvg-id"]||"",logo:info.attrs["tvg-logo"]||""});
+      info=null;
+    }
+  }
+  const seen=new Set();
+  return out.filter(x=>{const k=x.id+"|"+x.url;if(seen.has(k))return false;seen.add(k);return true});
+}
+
+function renderChannels(list){
+  const q=$("#search").value.trim().toLowerCase();
+  const filtered=q?list.filter(x=>x.name.toLowerCase().includes(q)):list;
+  const box=$("#channels");
+  box.innerHTML=filtered.map((x,i)=>{
+    const logo=x.logo||logoMap.get(x.id)||"";
+    return `<button class="channel" data-i="${i}">
+      <div class="logo-box">${logo?`<img src="${esc(logo)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden')">`:""}<div class="fallback-logo ${logo?'hidden':''}">TV</div></div>
+      <div class="ch-info"><div class="ch-name">${esc(x.name)}</div><div class="ch-meta">${favorites.has(x.id||x.url)?"♥ ":""}Live stream</div></div>
+    </button>`;
+  }).join("") || '<div class="empty">No channels match your search.</div>';
+  box.querySelectorAll(".channel").forEach((b,i)=>{
+    b.onclick=()=>openPlayer(filtered[i]);
+  });
+}
+
+function openPlayer(ch){
+  currentChannel=ch;
+  $("#playerTitle").textContent=ch.name;
+  $("#modal").classList.add("open");
+  $("#playerMsg").classList.add("hidden");
+  $("#video").style.display="block";
+  if(hls){hls.destroy();hls=null}
+  const video=$("#video");
+  video.pause();video.removeAttribute("src");video.load();
+
+  if(!ch.url){showPlayerError("This channel has no playable stream URL.");return}
+  $("#openStream").onclick=()=>window.open(ch.url,"_blank","noopener,noreferrer");
+  updateFavButton();
+
+  if(window.Hls && Hls.isSupported()){
+    hls=new Hls({enableWorker:true,lowLatencyMode:true,backBufferLength:30});
+    hls.on(Hls.Events.ERROR,(evt,data)=>{
+      if(data.fatal) showPlayerError("This stream cannot be played in the browser. It may be offline, geo-blocked, or may require a source-specific player.");
+    });
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play().catch(()=>{}));
+  }else if(video.canPlayType("application/vnd.apple.mpegurl")){
+    video.src=ch.url;video.play().catch(()=>{});
+  }else{
+    showPlayerError("Your browser does not support this live stream format.");
+  }
+}
+
+function showPlayerError(msg){
+  $("#video").style.display="none";
+  $("#playerMsg").classList.remove("hidden");
+  $("#playerMsg").querySelector("div").innerHTML=`<b>Stream unavailable</b>${esc(msg)}`;
+}
+
+function closePlayer(){
+  if(hls){hls.destroy();hls=null}
+  const v=$("#video");v.pause();v.removeAttribute("src");v.load();
+  $("#modal").classList.remove("open");
+}
+function updateFavButton(){
+  const key=currentChannel?.id||currentChannel?.url;
+  $("#favChannel").textContent=favorites.has(key)?"♥ Remove favorite":"♡ Favorite";
+}
+function toggleFavorite(){
+  if(!currentChannel)return;
+  const key=currentChannel.id||currentChannel.url;
+  if(favorites.has(key)) favorites.delete(key); else favorites.add(key);
+  localStorage.setItem("worldtv:favorites",JSON.stringify([...favorites]));
+  updateFavButton();
+  if(currentCountry) renderChannels(channels);
+}
+
+function goHome(){
+  closePlayer();currentCountry=null;channels=[];
+  $("#channelView").classList.add("hidden");$("#countries").classList.remove("hidden");
+  setStatus(`${countries.length} countries available • public channel data`);
+  renderCountries(countries);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("#homeBtn").onclick=goHome;
+$("#backBtn").onclick=goHome;
+$("#closeBtn").onclick=closePlayer;
+$("#modal").onclick=e=>{if(e.target.id==="modal")closePlayer()};
+$("#favChannel").onclick=toggleFavorite;
+
+$("#refreshBtn").onclick=()=>location.reload();
+$("#randomBtn").onclick=()=>{
+  if(currentCountry && channels.length){
+    openPlayer(channels[Math.floor(Math.random()*channels.length)]);
+  }else if(countries.length){
+    loadCountry(countries[Math.floor(Math.random()*countries.length)].code);
+  }
+};
+$("#search").addEventListener("input",()=>{
+  const q=$("#search").value.trim().toLowerCase();
+  if(currentCountry) renderChannels(channels);
+  else renderCountries(countries.filter(c=>(c.name+" "+c.code).toLowerCase().includes(q)));
+});
+$("#favBtn").onclick=()=>{
+  const favs=channels.filter(x=>favorites.has(x.id||x.url));
+  if(currentCountry){renderChannels(favs);setStatus(`${favs.length} favorite channel(s)`)}
+  else toast("Open a country first to view its favorites.");
+};
+window.addEventListener("keydown",e=>{if(e.key==="Escape")closePlayer()});
+init();
+</script>
+</body>
+</html>
+<!-- Loading Spinner -->
+            <div id="channelLoader" class="hidden text-center py-10">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-ytRed"></i>
+                <p class="mt-3 text-gray-400">Fetching channel details from API...</p>
+            </div>
+
+            <!-- Channel Results Display -->
+            <div id="channelResult" class="hidden space-y-6">
+                <!-- Profile Header -->
+                <div class="bg-ytCard p-6 rounded-2xl border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
+                        <img id="cAvatar" src="" alt="Channel Avatar" class="w-24 h-24 rounded-full border-2 border-ytRed object-cover shadow-md">
+                        <div>
+                            <h3 id="cTitle" class="text-2xl font-bold text-white">Channel Name</h3>
+                            <p id="cHandle" class="text-ytRed font-medium">@username</p>
+                            <p id="cDesc" class="text-gray-400 text-xs mt-2 line-clamp-2 max-w-xl">Channel Description</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer bg-black/40 px-3 py-2 rounded-lg text-xs">
+                            <input type="checkbox" id="autoRefreshToggle" onchange="toggleAutoRefresh()" class="accent-ytRed">
+                            <span>Realtime Auto-Refresh (5s)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-ytCard p-6 rounded-xl border border-gray-800 text-center relative overflow-hidden">
+                        <i class="fa-solid fa-users text-ytRed text-3xl mb-2 opacity-80"></i>
+                        <h4 class="text-gray-400 text-sm">Subscribers</h4>
+                        <p id="cSubs" class="text-3xl font-extrabold text-white mt-1">0</p>
+                        <span id="liveBadge" class="hidden absolute top-3 right-3 bg-red-600/20 text-ytRed text-[10px] px-2 py-0.5 rounded-full border border-ytRed font-bold animate-pulse-fast">LIVE</span>
+                    </div>
+
+                    <div class="bg-ytCard p-6 rounded-xl border border-gray-800 text-center">
+                        <i class="fa-solid fa-eye text-blue-500 text-3xl mb-2 opacity-80"></i>
+                        <h4 class="text-gray-400 text-sm">Total Channel Views</h4>
+                        <p id="cViews" class="text-3xl font-extrabold text-white mt-1">0</p>
+                    </div>
+
+                    <div class="bg-ytCard p-6 rounded-xl border border-gray-800 text-center">
+                        <i class="fa-solid fa-video text-green-500 text-3xl mb-2 opacity-80"></i>
+                        <h4 class="text-gray-400 text-sm">Total Videos</h4>
+                        <p id="cVideos" class="text-3xl font-extrabold text-white mt-1">0</p>
+                    </div>
+                </div>
+
+                <!-- Raw JSON View Accordion -->
+                <details class="bg-ytCard p-4 rounded-xl border border-gray-800">
+                    <summary class="cursor-pointer font-semibold text-gray-300 text-sm flex items-center justify-between">
+                        <span><i class="fa-solid fa-code mr-2 text-ytRed"></i> View Raw JSON Response</span>
+                    </summary>
+                    <pre id="cRawJson" class="bg-black/80 p-4 rounded-lg mt-3 text-xs text-green-400 overflow-x-auto font-mono"></pre>
+                </details>
+            </div>
+        </section>
+
+        <!-- ================= VIDEO ANALYTICS & DOWNLOAD TAB ================= -->
+        <section id="videoSection" class="hidden space-y-6">
+            <div class="bg-ytCard p-6 rounded-2xl border border-gray-800 shadow-xl glow-red max-w-3xl mx-auto">
+                <h2 class="text-xl font-bold text-gray-200 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-link text-ytRed"></i> YouTube Video Link Downloader & Info
+                </h2>
+                <p class="text-gray-400 text-sm mb-4">Paste video URL (e.g. <code class="text-ytRed">https://youtu.be/X8X-XyK4CYE</code>)</p>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="videoUrl" placeholder="https://youtu.be/..." class="flex-1 bg-black/60 border border-gray-700 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-ytRed transition">
+                    <button onclick="fetchVideoInfo()" class="bg-ytRed hover:bg-red-700 px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-bolt"></i> Get Info & Links
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="videoLoader" class="hidden text-center py-10">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-ytRed"></i>
+                <p class="mt-3 text-gray-400">Fetching video details & generating download links...</p>
+            </div>
+
+            <!-- Video Results Display -->
+            <div id="videoResult" class="hidden space-y-6">
+                <div class="bg-ytCard p-6 rounded-2xl border border-gray-800 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Thumbnail & Quick Player -->
+                    <div class="space-y-3">
+                        <img id="vThumb" src="" alt="Thumbnail" class="w-full rounded-xl border border-gray-800 shadow-md">
+                        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                            <div class="bg-black/50 p-2 rounded-lg">
+                                <span class="text-gray-400 block">Duration</span>
+                                <span id="vDuration" class="font-bold text-white">-</span>
+                            </div>
+                            <div class="bg-black/50 p-2 rounded-lg">
+                                <span class="text-gray-400 block">Likes</span>
+                                <span id="vLikes" class="font-bold text-white">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details & Download Links -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 id="vTitle" class="text-xl font-bold text-white leading-snug">Video Title</h3>
+                        <p id="vChannel" class="text-ytRed text-sm font-semibold">Channel Name</p>
+                        <p id="vViews" class="text-gray-300 text-sm"><i class="fa-solid fa-eye text-blue-400 mr-1"></i> 0 Views</p>
+
+                        <hr class="border-gray-800">
+
+                        <!-- Download Section -->
+                        <div>
+                            <h4 class="font-bold text-white mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-download text-green-500"></i> Download Links (All-in-One)
+                            </h4>
+                            <div id="downloadContainer" class="flex flex-wrap gap-2">
+                                <!-- Dynamic download buttons will be rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- Raw JSON -->
+                        <details class="bg-black/40 p-3 rounded-lg border border-gray-800">
+                            <summary class="cursor-pointer text-xs text-gray-400 font-semibold">View Raw Video Response</summary>
+                            <pre id="vRawJson" class="bg-black/90 p-3 rounded mt-2 text-[11px] text-green-400 overflow-x-auto font-mono"></pre>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-ytCard border-t border-gray-800 text-center py-4 text-xs text-gray-500">
+        <p>Powered by Rohit YouTube API Hub &copy; 2026. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const API_INFO_BASE = "https://rohit-youtube-info-api.onrender.com";
+        const API_DL_BASE = "https://rohit-youtube-download-info-api.onrender.com";
+
+        let autoRefreshInterval = null;
+
+        // Tab Switching
+        function switchTab(tab) {
+            const channelSec = document.getElementById('channelSection');
+            const videoSec = document.getElementById('videoSection');
+            const tabChannelBtn = document.getElementById('tabChannelBtn');
+            const tabVideoBtn = document.getElementById('tabVideoBtn');
+
+            if (tab === 'channel') {
+                channelSec.classList.remove('hidden');
+                videoSec.classList.add('hidden');
+                tabChannelBtn.className = "px-4 py-2 rounded-md font-semibold bg-ytRed text-white transition-all";
+                tabVideoBtn.className = "px-4 py-2 rounded-md font-semibold text-gray-400 hover:text-white transition-all";
+            } else {
+                channelSec.classList.add('hidden');
+                videoSec.classList.remove('hidden');
+                tabVideoBtn.className = "px-4 py-2 rounded-md font-semibold bg-ytRed text-white transition-all";
+                tabChannelBtn.className = "px-4 py-2 rounded-md font-semibold text-gray-400 hover:text-white transition-all";
+            }
+        }
+
+        // Fetch Channel Information
+        async function fetchChannelInfo() {
+            let handle = document.getElementById('channelHandle').value.trim();
+            if (!handle) {
+                alert("Kripya channel handle ya username daalein!");
+                return;
+            }
+
+            if (!handle.startsWith('@')) {
+                handle = '@' + handle;
+            }
+
+            const loader = document.getElementById('channelLoader');
+            const result = document.getElementById('channelResult');
+
+            loader.classList.remove('hidden');
+            result.classList.add('hidden');
+
+            try {
+                const res = await fetch(`${API_INFO_BASE}/yt_channel_info?handle=${encodeURIComponent(handle)}`);
+                if (!res.ok) throw new Error("API Network error");
+                
+                const data = await res.json();
+                loader.classList.add('hidden');
+                result.classList.remove('hidden');
+
+                // Render Channel Info
+                document.getElementById('cTitle').innerText = data.channel_name || data.title || handle;
+                document.getElementById('cHandle').innerText = handle;
+                document.getElementById('cDesc').innerText = data.description || data.channel_description || "No description available";
+                
+                if (data.avatar || data.channel_avatar || data.profile_image) {
+                    document.getElementById('cAvatar').src = data.avatar || data.channel_avatar || data.profile_image;
+                } else {
+                    document.getElementById('cAvatar').src = "https://cdn-icons-png.flaticon.com/512/1384/1384060.png";
+                }
+
+                document.getElementById('cSubs').innerText = formatNumber(data.subscriber_count || data.subscribers || 0);
+                document.getElementById('cViews').innerText = formatNumber(data.total_views || data.views || 0);
+                document.getElementById('cVideos').innerText = formatNumber(data.total_videos || data.video_count || 0);
+
+                document.getElementById('cRawJson').innerText = JSON.stringify(data, null, 2);
+
+            } catch (err) {
+                loader.classList.add('hidden');
+                alert("Error fetching channel info: " + err.message);
+            }
+        }
+
+        // Toggle Auto Refresh for Channel
+        function toggleAutoRefresh() {
+            const isChecked = document.getElementById('autoRefreshToggle').checked;
+            const badge = document.getElementById('liveBadge');
+
+            if (isChecked) {
+                badge.classList.remove('hidden');
+                autoRefreshInterval = setInterval(() => {
+                    fetchChannelInfo();
+                }, 5000);
+            } else {
+                badge.classList.add('hidden');
+                clearInterval(autoRefreshInterval);
+            }
+        }
+
+        // Fetch Video Info and Download Links
+        async function fetchVideoInfo() {
+            const url = document.getElementById('videoUrl').value.trim();
+            if (!url) {
+                alert("Kripya YouTube Video URL daalein!");
+                return;
+            }
+
+            const loader = document.getElementById('videoLoader');
+            const result = document.getElementById('videoResult');
+
+            loader.classList.remove('hidden');
+            result.classList.add('hidden');
+
+            try {
+                // Fetch info and download links simultaneously
+                const [infoRes, dlRes] = await Promise.allSettled([
+                    fetch(`${API_INFO_BASE}/yt_video_full_info?url=${encodeURIComponent(url)}`),
+                    fetch(`${API_DL_BASE}/yt_download_links?url=${encodeURIComponent(url)}`)
+                ]);
+
+                let infoData = infoRes.status === 'fulfilled' ? await infoRes.value.json() : {};
+                let dlData = dlRes.status === 'fulfilled' ? await dlRes.value.json() : {};
+
+                loader.classList.add('hidden');
+                result.classList.remove('hidden');
+
+                const title = infoData.title || dlData.title || "YouTube Video";
+                const channel = infoData.channel_name || infoData.author || dlData.channel || "Unknown Channel";
+                const views = infoData.views || infoData.view_count || dlData.views || 0;
+                const likes = infoData.likes || infoData.like_count || "N/A";
+                const duration = infoData.duration || dlData.duration || "N/A";
+                const thumb = infoData.thumbnail || dlData.thumbnail || `https://img.youtube.com/vi/${extractVideoID(url)}/hqdefault.jpg`;
+
+                document.getElementById('vTitle').innerText = title;
+                document.getElementById('vChannel').innerText = channel;
+                document.getElementById('vViews').innerHTML = `<i class="fa-solid fa-eye text-blue-400 mr-1"></i> ${formatNumber(views)} Views`;
+                document.getElementById('vLikes').innerText = formatNumber(likes);
+                document.getElementById('vDuration').innerText = duration;
+                document.getElementById('vThumb').src = thumb;
+
+                // Combined Raw JSON
+                document.getElementById('vRawJson').innerText = JSON.stringify({ video_info: infoData, download_info: dlData }, null, 2);
+
+                // Render Download Links
+                const container = document.getElementById('downloadContainer');
+                container.innerHTML = '';
+
+                // Extract links from responses
+                const links = extractDownloadLinks(infoData, dlData);
+
+                if (links.length === 0) {
+                    container.innerHTML = `<p class="text-sm text-yellow-500">Direct download links generate nahi ho sake. Neeche raw JSON check karein.</p>`;
+                } else {
+                    links.forEach(item => {
+                        const btn = document.createElement('a');
+                        btn.href = item.url;
+                        btn.target = "_blank";
+                        btn.className = "bg-ytRed hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg text-xs flex items-center gap-2 transition shadow-md";
+                        btn.innerHTML = `<i class="fa-solid fa-download"></i> ${item.quality || 'Download'} (${item.type || 'MP4'})`;
+                        container.appendChild(btn);
+                    });
+                }
+
+            } catch (err) {
+                loader.classList.add('hidden');
+                alert("Error fetching video data: " + err.message);
+            }
+        }
+
+        // Helper: Extract Download Links from API JSON
+        function extractDownloadLinks(info, dl) {
+            let links = [];
+
+            const processArray = (arr) => {
+                if (Array.isArray(arr)) {
+                    arr.forEach(item => {
+                        if (typeof item === 'string' && item.startsWith('http')) {
+                            links.push({ quality: 'Direct Link', url: item, type: 'Video' });
+                        } else if (item && item.url) {
+                            links.push({
+                                quality: item.quality || item.format || 'HD Link',
+                                url: item.url,
+                                type: item.type || (item.ext ? item.ext.toUpperCase() : 'MP4')
+                            });
+                        }
+                    });
+                }
+            };
+
+            if (dl.download_links) processArray(dl.download_links);
+            if (dl.links) processArray(dl.links);
+            if (dl.data) processArray(dl.data);
+            if (info.download_links) processArray(info.download_links);
+            if (info.links) processArray(info.links);
+
+            // Fallback if direct link exists
+            if (links.length === 0 && (dl.url || dl.download_url)) {
+                links.push({ quality: 'High Quality', url: dl.url || dl.download_url, type: 'MP4' });
+            }
+
+            return links;
+        }
+
+        // Helper: Extract YouTube Video ID
+        function extractVideoID(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : '';
+        }
+
+        // Helper: Format Big Numbers (e.g. 1.2M, 500K)
+        function formatNumber(num) {
+            if (isNaN(num)) return num;
+            num = Number(num);
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+            return num.toLocaleString();
+        }
+    </script>
+</body>
+</html>
