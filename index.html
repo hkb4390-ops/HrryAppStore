@@ -88,7 +88,6 @@
             display: block;
         }
 
-        /* Upload Area */
         .drop-zone {
             border: 2px dashed var(--primary);
             background: var(--card-bg);
@@ -113,7 +112,6 @@
             display: none;
         }
 
-        /* Progress Card */
         .progress-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -161,7 +159,6 @@
             color: var(--text-sub);
         }
 
-        /* Result Link Card */
         .result-card {
             background: var(--card-bg);
             border: 1px solid var(--success);
@@ -195,7 +192,6 @@
             cursor: pointer;
         }
 
-        /* History List */
         .history-list {
             display: flex;
             flex-direction: column;
@@ -313,16 +309,15 @@
                 <button class="btn btn-sm" style="background: #ef4444;" onclick="clearHistory()">Clear History</button>
             </div>
             <div id="historyContainer" class="history-list">
-                <!-- History Items Rendered Here -->
             </div>
         </div>
     </div>
 
     <script>
-        // REPLACE THIS WITH YOUR RENDER BOT DOMAIN (Without trailing slash)
-        const SERVER_URL = "https://telegram-stream-bot-r3kk.onrender.com/"; 
+        // FIXED: Trailing slash '/' removed
+        const SERVER_URL = "https://telegram-stream-bot-r3kk.onrender.com"; 
 
-        let startTime, lastLoaded = 0;
+        let startTime;
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -347,11 +342,9 @@
             document.getElementById('fileName').innerText = file.name;
             document.getElementById('fileType').innerText = file.type || "FILE";
 
-            // Thumbnail generation
             const thumbUrl = await generateThumbnail(file);
             document.getElementById('previewImage').src = thumbUrl;
 
-            // Upload handling
             uploadFile(file, thumbUrl);
         }
 
@@ -365,10 +358,10 @@
             xhr.upload.onprogress = function(e) {
                 if (e.lengthComputable) {
                     const now = new Date().getTime();
-                    const duration = (now - startTime) / 1000;
+                    const duration = (now - startTime) / 1000 || 0.1;
                     
                     const percent = Math.round((e.loaded / e.total) * 100);
-                    const speed = (e.loaded / (1024 * 1024 * duration)).toFixed(2); // MB/s
+                    const speed = (e.loaded / (1024 * 1024 * duration)).toFixed(2);
                     
                     const loadedMB = (e.loaded / (1024 * 1024)).toFixed(1);
                     const totalMB = (e.total / (1024 * 1024)).toFixed(1);
@@ -382,30 +375,38 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    document.getElementById('resultCard').style.display = 'block';
-                    document.getElementById('playerLink').value = response.player_link;
-                    document.getElementById('streamLink').value = response.stream_link;
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        document.getElementById('resultCard').style.display = 'block';
+                        document.getElementById('playerLink').value = response.player_link;
+                        document.getElementById('streamLink').value = response.stream_link;
 
-                    // Save item to My History
-                    saveToHistory({
-                        name: response.file_name,
-                        size: (response.file_size / (1024 * 1024)).toFixed(2) + ' MB',
-                        thumb: thumbUrl,
-                        playerLink: response.player_link,
-                        streamLink: response.stream_link,
-                        date: new Date().toLocaleDateString()
-                    });
+                        saveToHistory({
+                            name: response.file_name,
+                            size: (response.file_size / (1024 * 1024)).toFixed(2) + ' MB',
+                            thumb: thumbUrl,
+                            playerLink: response.player_link,
+                            streamLink: response.stream_link,
+                            date: new Date().toLocaleDateString()
+                        });
+                    } catch(e) {
+                        alert("Invalid JSON response from server!");
+                    }
                 } else {
-                    alert('Upload failed!');
+                    alert('Upload failed with status: ' + xhr.status);
                 }
             };
 
-            xhr.open('POST', `${SERVER_URL}/upload`, true);
+            xhr.onerror = function() {
+                alert('Network error ya Render Server offline/sleep mode par hai!');
+            };
+
+            // Double-slash fix applied automatically
+            const targetEndpoint = SERVER_URL.replace(/\/+$/, '') + '/upload';
+            xhr.open('POST', targetEndpoint, true);
             xhr.send(formData);
         }
 
-        // Generate Preview Thumbnail for Videos and Images
         function generateThumbnail(file) {
             return new Promise((resolve) => {
                 if (file.type.startsWith('image/')) {
