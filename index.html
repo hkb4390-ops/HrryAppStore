@@ -8,13 +8,11 @@
 
     <title>Hrry Cloud — Direct Cloud Uploader</title>
 
-    <!-- ================= SEO ================= -->
     <meta name="description"
-          content="Hrry Cloud — Upload videos, photos, audio and documents directly to the cloud and get instant player and direct stream links.">
+          content="Hrry Cloud — Upload videos, photos, audio, documents and HTML previews directly to the cloud and get instant player and direct stream links.">
 
     <meta name="theme-color" content="#07080d">
 
-    <!-- ================= OPEN GRAPH ================= -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Hrry Cloud">
     <meta property="og:title" content="Hrry Cloud — Direct Cloud Uploader">
@@ -30,7 +28,6 @@
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/jpeg">
 
-    <!-- ================= TWITTER / X ================= -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title"
           content="Hrry Cloud — Direct Cloud Uploader">
@@ -39,7 +36,6 @@
     <meta name="twitter:image"
           content="https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg">
 
-    <!-- ================= ICON ================= -->
     <link rel="icon"
           href="https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg">
 
@@ -48,11 +44,6 @@
         rel="stylesheet">
 
     <style>
-
-        /* =====================================================
-           ROOT
-        ===================================================== */
-
         :root {
             --bg: #05060a;
             --bg2: #080b12;
@@ -73,10 +64,6 @@
 
             --border: rgba(255,255,255,0.10);
         }
-
-        /* =====================================================
-           RESET
-        ===================================================== */
 
         * {
             box-sizing: border-box;
@@ -123,49 +110,19 @@
             overflow-x: hidden;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-
-            pointer-events: none;
-
-            background:
-                linear-gradient(
-                    120deg,
-                    transparent 0%,
-                    rgba(255,255,255,0.015) 50%,
-                    transparent 100%
-                );
-
-            z-index: -1;
-        }
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
-
         header {
             width: 100%;
             max-width: 1000px;
-
             margin: 0 auto;
-
             padding: 22px 20px 18px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             border-bottom: 1px solid rgba(255,255,255,0.06);
-
             position: sticky;
             top: 0;
-
             z-index: 50;
-
             background: rgba(5,6,10,0.72);
-
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
         }
@@ -179,37 +136,19 @@
         .brand-icon {
             width: 48px;
             height: 48px;
-
             border-radius: 15px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-size: 22px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #7c3cff,
-                    #009dff
-                );
-
-            box-shadow:
-                0 0 25px rgba(0,140,255,0.35),
-                inset 0 0 15px rgba(255,255,255,0.18);
-
+            background: linear-gradient(135deg, #7c3cff, #009dff);
+            box-shadow: 0 0 25px rgba(0,140,255,0.35), inset 0 0 15px rgba(255,255,255,0.18);
             animation: brandFloat 3s ease-in-out infinite;
         }
 
         @keyframes brandFloat {
-            0%,100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-3px);
-            }
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         .brand-text h1 {
@@ -224,2349 +163,797 @@
             margin-top: 2px;
         }
 
-        /* =====================================================
-           NAV
-        ===================================================== */
-
         .nav-tabs {
             display: flex;
             gap: 7px;
-
             padding: 5px;
-
             border-radius: 14px;
-
             background: rgba(255,255,255,0.035);
             border: 1px solid var(--border);
         }
 
         .tab-btn {
             border: none;
-
             color: #aeb5c5;
-
             background: transparent;
-
             padding: 9px 12px;
-
             border-radius: 10px;
-
             font-size: 12px;
             font-weight: 700;
-
             cursor: pointer;
-
-            transition:
-                transform .25s ease,
-                background .25s ease,
-                color .25s ease;
+            transition: transform .25s ease, background .25s ease, color .25s ease;
         }
 
         .tab-btn.active {
             color: white;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #168eff,
-                    #0869dc
-                );
-
-            box-shadow:
-                0 5px 18px rgba(0,120,255,0.25);
+            background: linear-gradient(135deg, #168eff, #0869dc);
+            box-shadow: 0 5px 18px rgba(0,120,255,0.25);
         }
 
-        .tab-btn:active {
-            transform: scale(.94);
-        }
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        .tab-btn:active { transform: scale(.94); }
 
         .container {
             width: 100%;
             max-width: 800px;
-
             margin: 0 auto;
-
             padding: 25px 17px 70px;
         }
 
-        .panel {
-            display: none;
-        }
-
+        .panel { display: none; }
         .panel.active {
             display: block;
             animation: panelIn .35s ease;
         }
 
         @keyframes panelIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* =====================================================
-           HERO
-        ===================================================== */
-
-        .hero {
-            text-align: center;
-
-            padding: 25px 10px 30px;
-        }
-
+        .hero { text-align: center; padding: 25px 10px 30px; }
         .hero-logo {
             width: 76px;
             height: 76px;
-
             margin: auto;
-
             border-radius: 25px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-size: 35px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #733dff,
-                    #00a7ff
-                );
-
-            box-shadow:
-                0 0 40px rgba(0,130,255,0.30);
-
+            background: linear-gradient(135deg, #733dff, #00a7ff);
+            box-shadow: 0 0 40px rgba(0,130,255,0.30);
             animation: heroPulse 3s ease-in-out infinite;
         }
 
         @keyframes heroPulse {
-            0%,100% {
-                transform: scale(1);
-                box-shadow:
-                    0 0 35px rgba(0,130,255,0.25);
-            }
-
-            50% {
-                transform: scale(1.035);
-                box-shadow:
-                    0 0 55px rgba(0,130,255,0.42);
-            }
+            0%,100% { transform: scale(1); box-shadow: 0 0 35px rgba(0,130,255,0.25); }
+            50% { transform: scale(1.035); box-shadow: 0 0 55px rgba(0,130,255,0.42); }
         }
 
         .hero h2 {
             margin-top: 20px;
-
             font-size: clamp(30px, 8vw, 46px);
-
             font-weight: 900;
-
             letter-spacing: -1.5px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ffffff,
-                    #69c7ff,
-                    #a78bfa
-                );
-
+            background: linear-gradient(90deg, #ffffff, #69c7ff, #a78bfa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             max-width: 580px;
-
             margin: 10px auto 0;
-
             color: var(--muted);
-
             font-size: 14px;
             line-height: 1.7;
         }
 
-        /* =====================================================
-           TELEGRAM HERO BUTTON
-        ===================================================== */
-
         .telegram-launch {
             width: 100%;
-
             margin: 8px 0 25px;
-
             padding: 17px 20px;
-
             border-radius: 20px;
-
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-
             text-decoration: none;
-
             color: white;
-
             font-size: 16px;
             font-weight: 800;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #009cff,
-                    #0072e5
-                );
-
+            background: linear-gradient(135deg, #009cff, #0072e5);
             border: 1px solid rgba(255,255,255,0.18);
-
-            box-shadow:
-                0 12px 35px rgba(0,130,255,0.27),
-                inset 0 1px 0 rgba(255,255,255,0.22);
-
+            box-shadow: 0 12px 35px rgba(0,130,255,0.27), inset 0 1px 0 rgba(255,255,255,0.22);
             position: relative;
             overflow: hidden;
-
-            transition:
-                transform .25s ease,
-                box-shadow .25s ease;
+            transition: transform .25s ease, box-shadow .25s ease;
         }
 
-        .telegram-launch::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: -120%;
-
-            width: 70%;
-            height: 100%;
-
-            background:
-                linear-gradient(
-                    100deg,
-                    transparent,
-                    rgba(255,255,255,0.28),
-                    transparent
-                );
-
-            transform: skewX(-20deg);
-
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                left: -120%;
-            }
-
-            45%,100% {
-                left: 140%;
-            }
-        }
-
-        .telegram-launch i {
-            font-size: 22px;
-
-            animation: telegramFloat 2s ease-in-out infinite;
-        }
-
-        @keyframes telegramFloat {
-            0%,100% {
-                transform: translateX(0) rotate(0);
-            }
-
-            50% {
-                transform: translateX(3px) rotate(-5deg);
-            }
-        }
-
-        .telegram-launch:active {
-            transform: scale(.97);
-        }
-
-        /* =====================================================
-           FEATURE CARD
-        ===================================================== */
+        .telegram-launch i { font-size: 22px; }
 
         .feature-card {
             background: var(--card);
-
             border: 1px solid var(--border);
-
             border-radius: 25px;
-
             padding: 22px;
-
             margin-bottom: 22px;
-
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-
-            box-shadow:
-                0 15px 50px rgba(0,0,0,.25);
+            box-shadow: 0 15px 50px rgba(0,0,0,.25);
         }
 
         .feature-title {
             display: flex;
             align-items: center;
             gap: 13px;
-
             margin-bottom: 18px;
         }
 
         .feature-icon {
             width: 48px;
             height: 48px;
-
             border-radius: 15px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(0,145,255,.25),
-                    rgba(112,60,255,.20)
-                );
-
+            background: linear-gradient(135deg, rgba(0,145,255,.25), rgba(112,60,255,.20));
             border: 1px solid rgba(0,160,255,.20);
-
             color: #4cbaff;
-
             font-size: 21px;
         }
 
-        .feature-title h3 {
-            font-size: 19px;
-        }
-
-        .feature-title p {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        /* =====================================================
-           DROP ZONE
-        ===================================================== */
-
         .drop-zone {
             position: relative;
-
             border: 1px dashed rgba(40,155,255,.48);
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(20,30,50,.72),
-                    rgba(10,14,23,.80)
-                );
-
+            background: linear-gradient(145deg, rgba(20,30,50,.72), rgba(10,14,23,.80));
             border-radius: 22px;
-
             padding: 42px 20px;
-
             text-align: center;
-
             cursor: pointer;
-
             overflow: hidden;
-
-            transition:
-                transform .25s ease,
-                border-color .25s ease,
-                background .25s ease;
-        }
-
-        .drop-zone::before {
-            content: "";
-
-            position: absolute;
-
-            inset: -100%;
-
-            background:
-                conic-gradient(
-                    transparent,
-                    rgba(0,160,255,.12),
-                    transparent 25%
-                );
-
-            animation: rotateGlow 5s linear infinite;
-        }
-
-        @keyframes rotateGlow {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .drop-zone > * {
-            position: relative;
-            z-index: 1;
+            transition: transform .25s ease, border-color .25s ease, background .25s ease;
         }
 
         .drop-zone:hover {
             border-color: #159eff;
-
             transform: translateY(-2px);
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(18,45,75,.75),
-                    rgba(10,15,25,.9)
-                );
+            background: linear-gradient(145deg, rgba(18,45,75,.75), rgba(10,15,25,.9));
         }
 
         .upload-icon {
             width: 70px;
             height: 70px;
-
             margin: 0 auto 17px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             border-radius: 22px;
-
             color: #55bdff;
-
             font-size: 29px;
-
-            background:
-                rgba(0,130,255,.10);
-
+            background: rgba(0,130,255,.10);
             border: 1px solid rgba(0,150,255,.20);
-
-            box-shadow:
-                0 0 30px rgba(0,130,255,.14);
-        }
-
-        .drop-zone h3 {
-            font-size: 17px;
-        }
-
-        .drop-zone p {
-            color: var(--muted);
-
-            font-size: 12px;
-
-            margin-top: 7px;
+            box-shadow: 0 0 30px rgba(0,130,255,.14);
         }
 
         .max-size {
             display: inline-block;
-
             margin-top: 15px;
-
             padding: 6px 10px;
-
             border-radius: 8px;
-
             font-size: 11px;
-
             color: #70c9ff;
-
             background: rgba(0,140,255,.08);
-
             border: 1px solid rgba(0,140,255,.14);
         }
 
-        .file-input {
-            display: none;
-        }
-
-        /* =====================================================
-           PROGRESS CARD
-        ===================================================== */
+        .file-input { display: none; }
 
         .progress-card {
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(19,23,34,.88),
-                    rgba(9,12,19,.94)
-                );
-
+            background: linear-gradient(145deg, rgba(19,23,34,.88), rgba(9,12,19,.94));
             border: 1px solid var(--border);
-
             border-radius: 22px;
-
             padding: 20px;
-
             margin-top: 18px;
-
             display: none;
-
-            box-shadow:
-                0 15px 45px rgba(0,0,0,.30);
+            box-shadow: 0 15px 45px rgba(0,0,0,.30);
         }
 
         .file-info {
             display: flex;
             align-items: center;
             gap: 13px;
-
             margin-bottom: 18px;
-        }
-
-        .preview-wrap {
-            position: relative;
-            flex-shrink: 0;
         }
 
         .preview-thumb {
             width: 58px;
             height: 58px;
-
             border-radius: 15px;
-
             object-fit: cover;
-
             background: #050505;
-
             border: 1px solid rgba(255,255,255,.10);
         }
 
         .live-dot {
             position: absolute;
-
             right: -3px;
             bottom: -3px;
-
             width: 14px;
             height: 14px;
-
             border-radius: 50%;
-
             background: #00e89a;
-
             border: 3px solid #10141d;
-
             animation: liveDot 1s infinite;
         }
 
         @keyframes liveDot {
-            0%,100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: .35;
-                transform: scale(.75);
-            }
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .35; transform: scale(.75); }
         }
 
-        .file-name {
-            font-weight: 750;
-
-            font-size: 14px;
-
-            word-break: break-all;
-        }
-
-        .file-type {
-            color: var(--muted);
-
-            font-size: 11px;
-
-            margin-top: 4px;
-        }
-
-        /* =====================================================
-           REAL UPLOAD ANIMATION
-        ===================================================== */
+        .file-name { font-weight: 750; font-size: 14px; word-break: break-all; }
+        .file-type { color: var(--muted); font-size: 11px; margin-top: 4px; }
 
         .uploading-line {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             margin-bottom: 8px;
-
             font-size: 12px;
-        }
-
-        .uploading-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            color: #77cfff;
-            font-weight: 700;
         }
 
         .spinner {
             width: 16px;
             height: 16px;
-
             border-radius: 50%;
-
             border: 2px solid rgba(255,255,255,.14);
-
             border-top-color: #20a7ff;
             border-right-color: #8b5cf6;
-
             animation: spin .75s linear infinite;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .progress-percent {
-            color: white;
-            font-weight: 800;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .progress-bar-bg {
             width: 100%;
             height: 11px;
-
             background: rgba(255,255,255,.07);
-
             border-radius: 20px;
-
             overflow: hidden;
-
             border: 1px solid rgba(255,255,255,.05);
         }
 
         .progress-bar-fill {
             width: 0%;
-
             height: 100%;
-
             border-radius: inherit;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #007bff,
-                    #00cfff,
-                    #8b5cf6
-                );
-
-            box-shadow:
-                0 0 18px rgba(0,150,255,.55);
-
+            background: linear-gradient(90deg, #007bff, #00cfff, #8b5cf6);
+            box-shadow: 0 0 18px rgba(0,150,255,.55);
             position: relative;
-
-            transform-origin: left center;
         }
-
-        .progress-bar-fill::after {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: -30%;
-
-            width: 30%;
-            height: 100%;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(255,255,255,.65),
-                    transparent
-                );
-
-            animation: progressShine 1.1s linear infinite;
-        }
-
-        @keyframes progressShine {
-            from {
-                left: -30%;
-            }
-
-            to {
-                left: 110%;
-            }
-        }
-
-        /* =====================================================
-           STATS
-        ===================================================== */
 
         .stats-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, minmax(0,1fr));
-
+            grid-template-columns: repeat(3, minmax(0,1fr));
             gap: 8px;
-
             margin-top: 15px;
         }
 
         .stat {
             background: rgba(255,255,255,.035);
-
             border: 1px solid rgba(255,255,255,.055);
-
             border-radius: 12px;
-
             padding: 10px 8px;
-
             text-align: center;
         }
 
-        .stat i {
-            display: block;
-
-            color: #42b9ff;
-
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: var(--muted);
-
-            font-size: 9px;
-
-            display: block;
-        }
-
-        .stat-value {
-            color: white;
-
-            font-size: 11px;
-
-            font-weight: 750;
-
-            margin-top: 3px;
-
-            display: block;
-        }
-
-        /* =====================================================
-           RESULT
-        ===================================================== */
+        .stat i { color: #42b9ff; margin-bottom: 5px; }
+        .stat-label { color: var(--muted); font-size: 9px; display: block; }
+        .stat-value { color: white; font-size: 11px; font-weight: 750; margin-top: 3px; display: block; }
 
         .result-card {
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(0,220,150,.08),
-                    rgba(10,15,22,.90)
-                );
-
+            background: linear-gradient(145deg, rgba(0,220,150,.08), rgba(10,15,22,.90));
             border: 1px solid rgba(0,232,154,.28);
-
             border-radius: 22px;
-
             padding: 20px;
-
             margin-top: 18px;
-
             display: none;
-
             animation: resultIn .45s ease;
         }
 
         @keyframes resultIn {
-            from {
-                opacity: 0;
-                transform: translateY(12px) scale(.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(12px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .success-title {
             color: var(--green);
-
             font-size: 18px;
-
             font-weight: 800;
-
             display: flex;
             align-items: center;
-
             gap: 9px;
         }
 
-        .link-group {
-            margin-top: 17px;
-        }
+        .link-group { margin-top: 17px; }
+        .link-label { color: var(--muted); font-size: 11px; margin-bottom: 7px; display: block; }
 
-        .link-label {
-            color: var(--muted);
-
-            font-size: 11px;
-
-            margin-bottom: 7px;
-
-            display: block;
-        }
-
-        .link-box {
-            display: flex;
-
-            gap: 8px;
-        }
-
+        .link-box { display: flex; gap: 8px; }
         .link-box input {
             flex: 1;
-
             min-width: 0;
-
             background: rgba(0,0,0,.35);
-
             border: 1px solid rgba(255,255,255,.09);
-
             color: white;
-
             padding: 11px 12px;
-
             border-radius: 11px;
-
             outline: none;
-
             font-size: 11px;
         }
 
         .btn {
             border: none;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #168fff,
-                    #006bdd
-                );
-
+            background: linear-gradient(135deg, #168fff, #006bdd);
             color: white;
-
             padding: 10px 14px;
-
             border-radius: 10px;
-
             cursor: pointer;
-
             font-weight: 700;
-
             transition: transform .2s ease;
-        }
-
-        .btn:active {
-            transform: scale(.94);
-        }
-
-        /* =====================================================
-           HISTORY
-        ===================================================== */
-
-        .history-head {
-            display: flex;
-
-            justify-content: space-between;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
-
-            margin-bottom: 17px;
-        }
-
-        .history-head h2 {
-            font-size: 21px;
-        }
-
-        .history-list {
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 12px;
-        }
-
-        .history-item {
-            background: var(--card);
-
-            border: 1px solid var(--border);
-
-            border-radius: 18px;
-
-            padding: 13px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            backdrop-filter: blur(20px);
-
-            transition:
-                transform .2s ease,
-                border-color .2s ease;
-        }
-
-        .history-item:hover {
-            transform: translateY(-2px);
-
-            border-color: rgba(0,150,255,.25);
-        }
-
-        .history-item img {
-            width: 58px;
-            height: 58px;
-
-            border-radius: 13px;
-
-            object-fit: cover;
-
-            background: #000;
-
-            flex-shrink: 0;
-        }
-
-        .history-details {
-            flex: 1;
-
-            min-width: 0;
-        }
-
-        .history-title {
-            font-weight: 700;
-
-            font-size: 13px;
-
-            margin-bottom: 5px;
-
-            word-break: break-all;
-        }
-
-        .history-meta {
-            font-size: 10px;
-
-            color: var(--muted);
-        }
-
-        .history-actions {
-            display: flex;
-
             gap: 6px;
-
-            flex-shrink: 0;
         }
 
-        .btn-sm {
-            padding: 7px 9px;
+        .btn:active { transform: scale(.94); }
 
-            font-size: 10px;
+        .btn-preview {
+            background: linear-gradient(135deg, #00e89a, #00a86b);
+            color: #05060a;
+            margin-top: 15px;
+            width: 100%;
+            justify-content: center;
+            padding: 12px;
+            font-size: 13px;
         }
-
-        /* =====================================================
-           ABOUT ADMIN
-        ===================================================== */
 
         .admin-card {
             margin-top: 30px;
-
             padding: 30px 20px;
-
             text-align: center;
-
             border-radius: 25px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(17,20,30,.90),
-                    rgba(7,9,14,.96)
-                );
-
+            background: linear-gradient(145deg, rgba(17,20,30,.90), rgba(7,9,14,.96));
             border: 1px solid rgba(255,255,255,.08);
-
-            box-shadow:
-                0 20px 55px rgba(0,0,0,.30);
+            box-shadow: 0 20px 55px rgba(0,0,0,.30);
         }
 
         .admin-icon {
             width: 75px;
             height: 75px;
-
             margin: 0 auto 18px;
-
             border-radius: 23px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-size: 31px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #673cff,
-                    #00a7ff
-                );
-
-            box-shadow:
-                0 0 35px rgba(0,130,255,.28);
-
-            animation: adminFloat 3s ease-in-out infinite;
+            background: linear-gradient(135deg, #673cff, #00a7ff);
+            box-shadow: 0 0 35px rgba(0,130,255,.28);
         }
 
-        @keyframes adminFloat {
-            0%,100% {
-                transform: translateY(0);
-            }
+        .admin-card h2 { font-size: 27px; font-weight: 900; }
+        .admin-role { color: #20baff; font-size: 14px; font-weight: 700; margin-top: 8px; }
+        .admin-description { color: #9ca4b6; font-size: 13px; line-height: 1.8; max-width: 590px; margin: 17px auto 20px; }
+        .admin-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+        .admin-tag { padding: 9px 13px; border-radius: 11px; color: #e7ebf5; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08); font-size: 11px; font-weight: 700; }
 
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .admin-card h2 {
-            font-size: 27px;
-
-            font-weight: 900;
-        }
-
-        .admin-role {
-            color: #20baff;
-
-            font-size: 14px;
-
-            font-weight: 700;
-
-            margin-top: 8px;
-        }
-
-        .admin-description {
-            color: #9ca4b6;
-
-            font-size: 13px;
-
-            line-height: 1.8;
-
-            max-width: 590px;
-
-            margin: 17px auto 20px;
-        }
-
-        .admin-tags {
-            display: flex;
-
-            justify-content: center;
-
-            flex-wrap: wrap;
-
-            gap: 8px;
-        }
-
-        .admin-tag {
-            padding: 9px 13px;
-
-            border-radius: 11px;
-
-            color: #e7ebf5;
-
-            background: rgba(255,255,255,.045);
-
-            border: 1px solid rgba(255,255,255,.08);
-
-            font-size: 11px;
-
-            font-weight: 700;
-        }
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        footer {
-            text-align: center;
-
-            padding: 25px 10px 10px;
-
-            color: #596174;
-
-            font-size: 10px;
-        }
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
+        footer { text-align: center; padding: 25px 10px 10px; color: #596174; font-size: 10px; }
 
         @media (max-width: 600px) {
-
-            header {
-                padding: 14px 13px;
-            }
-
-            .brand-icon {
-                width: 42px;
-                height: 42px;
-
-                border-radius: 13px;
-
-                font-size: 18px;
-            }
-
-            .brand-text h1 {
-                font-size: 17px;
-            }
-
-            .brand-text p {
-                font-size: 10px;
-            }
-
-            .nav-tabs {
-                gap: 3px;
-            }
-
-            .tab-btn {
-                padding: 8px 9px;
-
-                font-size: 10px;
-            }
-
-            .container {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .stats-grid .stat:last-child {
-                grid-column: 1 / -1;
-            }
-
-            .history-item {
-                align-items: flex-start;
-            }
-
-            .history-actions {
-                flex-direction: column;
-            }
-
-            .history-actions .btn {
-                white-space: nowrap;
-            }
+            header { padding: 14px 13px; }
+            .container { padding-left: 12px; padding-right: 12px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stats-grid .stat:last-child { grid-column: 1 / -1; }
         }
-
     </style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
-
 <header>
-
     <div class="brand">
-
         <div class="brand-icon">
             <i class="fa-solid fa-cloud-arrow-up"></i>
         </div>
-
         <div class="brand-text">
             <h1>Hrry Cloud</h1>
             <p>Direct Cloud Uploader</p>
         </div>
-
     </div>
 
     <div class="nav-tabs">
-
-        <button
-            class="tab-btn active"
-            onclick="switchTab('upload')">
-
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            Upload
-
+        <button class="tab-btn active" onclick="switchTab('upload')">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Upload
         </button>
-
-        <button
-            class="tab-btn"
-            onclick="switchTab('history')">
-
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            History
-
+        <button class="tab-btn" onclick="switchTab('history')">
+            <i class="fa-solid fa-clock-rotate-left"></i> History
         </button>
-
     </div>
-
 </header>
 
-
 <div class="container">
-
-<!-- =========================================================
-     UPLOAD PANEL
-========================================================= -->
-
-<div id="uploadPanel" class="panel active">
-
-
-    <!-- HERO -->
-
-    <section class="hero">
-
-        <div class="hero-logo">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-        </div>
-
-        <h2>Hrry Cloud</h2>
-
-        <p>
-            Upload your videos, photos, audio and documents
-            directly to the cloud and get instant streaming links.
-        </p>
-
-    </section>
-
-
-    <!-- TELEGRAM BUTTON -->
-
-    <a
-        class="telegram-launch"
-        href="https://t.me/PoltPulse_File_Id_bot"
-        target="_blank"
-        rel="noopener noreferrer">
-
-        <i class="fa-brands fa-telegram"></i>
-
-        <span>Launch Telegram Bot Now</span>
-
-        <i class="fa-solid fa-arrow-up-right-from-square"
-           style="font-size:13px;"></i>
-
-    </a>
-
-
-    <!-- UPLOAD CARD -->
-
-    <div class="feature-card">
-
-        <div class="feature-title">
-
-            <div class="feature-icon">
+    <div id="uploadPanel" class="panel active">
+        <section class="hero">
+            <div class="hero-logo">
                 <i class="fa-solid fa-cloud-arrow-up"></i>
             </div>
+            <h2>Hrry Cloud</h2>
+            <p>Upload your videos, photos, HTML pages and documents directly to the cloud and get instant preview links.</p>
+        </section>
 
-            <div>
-                <h3>Direct Cloud Upload</h3>
-                <p>Fast • Secure • Simple</p>
+        <a class="telegram-launch" href="https://t.me/PoltPulse_File_Id_bot" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Launch Telegram Bot Now</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:13px;"></i>
+        </a>
+
+        <div class="feature-card">
+            <div class="feature-title">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <div>
+                    <h3>Direct Cloud Upload</h3>
+                    <p>Fast • Secure • Web Preview Ready</p>
+                </div>
             </div>
 
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                </div>
+                <h3>Click or Drag & Drop your file</h3>
+                <p>HTML • Video • Photo • Audio • Documents</p>
+                <span class="max-size">
+                    <i class="fa-solid fa-hard-drive"></i> Maximum file size: 2 GB
+                </span>
+                <input type="file" id="fileInput" class="file-input" onchange="handleFileSelect(event)">
+            </div>
         </div>
 
-
-        <div
-            class="drop-zone"
-            id="dropZone"
-            onclick="document.getElementById('fileInput').click()">
-
-            <div class="upload-icon">
-                <i class="fa-solid fa-file-circle-plus"></i>
+        <div id="progressCard" class="progress-card">
+            <div class="file-info">
+                <div style="position:relative;">
+                    <img id="previewImage" class="preview-thumb" src="https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg" alt="Preview">
+                    <span class="live-dot"></span>
+                </div>
+                <div style="min-width:0; flex:1;">
+                    <div id="fileName" class="file-name">Preparing file...</div>
+                    <div id="fileType" class="file-type">FILE</div>
+                </div>
             </div>
 
-            <h3>
-                Click or Drag & Drop your file
-            </h3>
+            <div class="uploading-line">
+                <div style="display:flex; align-items:center; gap:8px; color:#77cfff; font-weight:700;">
+                    <span id="spinner" class="spinner"></span>
+                    <span id="uploadStatus">Uploading...</span>
+                </div>
+                <span id="percentage" style="color:white; font-weight:800;">0%</span>
+            </div>
 
-            <p>
-                Video • Photo • Audio • Documents
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar-fill"></div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span class="stat-label">SPEED</span>
+                    <span id="speed" class="stat-value">0 MB/s</span>
+                </div>
+                <div class="stat">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span class="stat-label">UPLOADED</span>
+                    <span id="sizeStats" class="stat-value">0 / 0 MB</span>
+                </div>
+                <div class="stat">
+                    <i class="fa-regular fa-clock"></i>
+                    <span class="stat-label">TIME</span>
+                    <span id="timeStats" class="stat-value">00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultCard" class="result-card">
+            <div class="success-title">
+                <i class="fa-solid fa-circle-check"></i> Upload Completed!
+            </div>
+
+            <div id="htmlPreviewContainer" style="display:none;">
+                <a id="htmlPreviewLink" href="#" target="_blank" class="btn btn-preview">
+                    <i class="fa-solid fa-globe"></i> Open Live Web Preview
+                </a>
+            </div>
+
+            <div class="link-group">
+                <label class="link-label">Web Player / Web Preview Link</label>
+                <div class="link-box">
+                    <input type="text" id="playerLink" readonly>
+                    <button class="btn" onclick="copyInput('playerLink')">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="link-group">
+                <label class="link-label">Direct Stream / Download Link</label>
+                <div class="link-box">
+                    <input type="text" id="streamLink" readonly>
+                    <button class="btn" onclick="copyInput('streamLink')">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="admin-card">
+            <div class="admin-icon">
+                <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <h2>Himanshu Raj Yadav</h2>
+            <div class="admin-role">Lead Developer & System Architect</div>
+            <p class="admin-description">
+                Passionate creator specializing in advanced Telegram Bots, Android applications and modern web solutions.
             </p>
-
-            <span class="max-size">
-                <i class="fa-solid fa-hard-drive"></i>
-                Maximum file size: 2 GB
-            </span>
-
-            <input
-                type="file"
-                id="fileInput"
-                class="file-input"
-                onchange="handleFileSelect(event)">
-
-        </div>
-
+            <div class="admin-tags">
+                <span class="admin-tag"><i class="fa-brands fa-android"></i> Android Dev</span>
+                <span class="admin-tag"><i class="fa-solid fa-robot"></i> Bot Architecture</span>
+                <span class="admin-tag"><i class="fa-solid fa-layer-group"></i> UI/UX Design</span>
+                <span class="admin-tag"><i class="fa-solid fa-server"></i> Cloud Systems</span>
+            </div>
+        </section>
     </div>
 
-
-    <!-- =====================================================
-         REAL-TIME PROGRESS
-    ====================================================== -->
-
-    <div id="progressCard" class="progress-card">
-
-        <div class="file-info">
-
-            <div class="preview-wrap">
-
-                <img
-                    id="previewImage"
-                    class="preview-thumb"
-                    src="https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg"
-                    alt="File Preview">
-
-                <span class="live-dot"></span>
-
-            </div>
-
-            <div style="min-width:0; flex:1;">
-
-                <div
-                    id="fileName"
-                    class="file-name">
-
-                    Preparing file...
-
-                </div>
-
-                <div
-                    id="fileType"
-                    class="file-type">
-
-                    FILE
-
-                </div>
-
-            </div>
-
+    <div id="historyPanel" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:17px;">
+            <h2>Uploaded Files</h2>
+            <button class="btn" style="background:#ef3f5b; padding:7px 11px; font-size:11px;" onclick="clearHistory()">
+                <i class="fa-solid fa-trash"></i> Clear
+            </button>
         </div>
-
-
-        <div class="uploading-line">
-
-            <div class="uploading-status">
-
-                <span
-                    id="spinner"
-                    class="spinner">
-                </span>
-
-                <span id="uploadStatus">
-                    Uploading...
-                </span>
-
-            </div>
-
-            <span
-                id="percentage"
-                class="progress-percent">
-
-                0%
-
-            </span>
-
-        </div>
-
-
-        <div class="progress-bar-bg">
-
-            <div
-                id="progressBar"
-                class="progress-bar-fill">
-            </div>
-
-        </div>
-
-
-        <div class="stats-grid">
-
-            <div class="stat">
-
-                <i class="fa-solid fa-gauge-high"></i>
-
-                <span class="stat-label">
-                    SPEED
-                </span>
-
-                <span
-                    id="speed"
-                    class="stat-value">
-
-                    0 MB/s
-
-                </span>
-
-            </div>
-
-
-            <div class="stat">
-
-                <i class="fa-solid fa-chart-line"></i>
-
-                <span class="stat-label">
-                    UPLOADED
-                </span>
-
-                <span
-                    id="sizeStats"
-                    class="stat-value">
-
-                    0 / 0 MB
-
-                </span>
-
-            </div>
-
-
-            <div class="stat">
-
-                <i class="fa-regular fa-clock"></i>
-
-                <span class="stat-label">
-                    TIME
-                </span>
-
-                <span
-                    id="timeStats"
-                    class="stat-value">
-
-                    00:00
-
-                </span>
-
-            </div>
-
-        </div>
-
+        <div id="historyContainer" style="display:flex; flex-direction:column; gap:12px;"></div>
     </div>
 
-
-    <!-- =====================================================
-         RESULT
-    ====================================================== -->
-
-    <div id="resultCard" class="result-card">
-
-        <div class="success-title">
-
-            <i class="fa-solid fa-circle-check"></i>
-
-            Upload Completed!
-
-        </div>
-
-
-        <div class="link-group">
-
-            <label class="link-label">
-                Web Player Link
-            </label>
-
-            <div class="link-box">
-
-                <input
-                    type="text"
-                    id="playerLink"
-                    readonly>
-
-                <button
-                    class="btn"
-                    onclick="copyInput('playerLink')">
-
-                    <i class="fa-regular fa-copy"></i>
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="link-group">
-
-            <label class="link-label">
-                Direct Stream / Download Link
-            </label>
-
-            <div class="link-box">
-
-                <input
-                    type="text"
-                    id="streamLink"
-                    readonly>
-
-                <button
-                    class="btn"
-                    onclick="copyInput('streamLink')">
-
-                    <i class="fa-regular fa-copy"></i>
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         ABOUT ADMIN
-    ====================================================== -->
-
-    <section class="admin-card">
-
-        <div class="admin-icon">
-
-            <i class="fa-solid fa-user-gear"></i>
-
-        </div>
-
-        <h2>Himanshu Raj Yadav</h2>
-
-        <div class="admin-role">
-            Lead Developer & System Architect
-        </div>
-
-        <p class="admin-description">
-
-            Passionate creator specializing in advanced
-            Telegram Bots, Android applications and modern
-            web solutions. Building high-performance tools
-            and premium digital experiences.
-
-        </p>
-
-
-        <div class="admin-tags">
-
-            <span class="admin-tag">
-                <i class="fa-brands fa-android"></i>
-                Android Dev
-            </span>
-
-            <span class="admin-tag">
-                <i class="fa-solid fa-robot"></i>
-                Bot Architecture
-            </span>
-
-            <span class="admin-tag">
-                <i class="fa-solid fa-layer-group"></i>
-                UI/UX Design
-            </span>
-
-            <span class="admin-tag">
-                <i class="fa-solid fa-server"></i>
-                Cloud Systems
-            </span>
-
-        </div>
-
-    </section>
-
-
+    <footer>Hrry Cloud • Direct Cloud Uploader</footer>
 </div>
-
-
-<!-- =========================================================
-     HISTORY PANEL
-========================================================= -->
-
-<div id="historyPanel" class="panel">
-
-    <div class="history-head">
-
-        <h2>
-            Uploaded Files
-        </h2>
-
-        <button
-            class="btn btn-sm"
-            style="background:#ef3f5b;"
-            onclick="clearHistory()">
-
-            <i class="fa-solid fa-trash"></i>
-            Clear
-
-        </button>
-
-    </div>
-
-
-    <div
-        id="historyContainer"
-        class="history-list">
-
-    </div>
-
-</div>
-
-
-<footer>
-    Hrry Cloud • Direct Cloud Uploader
-</footer>
-
-</div>
-
 
 <script>
-
-/* =========================================================
-   SERVER CONFIGURATION
-   ORIGINAL SERVER LOGIC KEPT
-========================================================= */
-
-const SERVER_URL =
-    "https://telegram-stream-bot-r3kk.onrender.com";
-
-
-/* =========================================================
-   MAXIMUM FILE SIZE
-   2 GB
-========================================================= */
-
-const MAX_FILE_SIZE =
-    2 * 1024 * 1024 * 1024;
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
+const SERVER_URL = "https://telegram-stream-bot-r3kk.onrender.com";
+const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024;
 
 let startTime = 0;
-
 let progressAnimationFrame = null;
-
 let displayedProgress = 0;
-
 let targetProgress = 0;
-
-let currentXHR = null;
-
-
-/* =========================================================
-   TAB SWITCH
-========================================================= */
+let localHtmlPreviewUrl = null;
 
 function switchTab(tab) {
-
-    document
-        .querySelectorAll('.tab-btn')
-        .forEach(btn =>
-            btn.classList.remove('active')
-        );
-
-    document
-        .querySelectorAll('.panel')
-        .forEach(panel =>
-            panel.classList.remove('active')
-        );
-
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
 
     if (tab === 'upload') {
-
-        document
-            .querySelectorAll('.tab-btn')[0]
-            .classList.add('active');
-
-        document
-            .getElementById('uploadPanel')
-            .classList.add('active');
-
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('uploadPanel').classList.add('active');
     } else {
-
-        document
-            .querySelectorAll('.tab-btn')[1]
-            .classList.add('active');
-
-        document
-            .getElementById('historyPanel')
-            .classList.add('active');
-
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('historyPanel').classList.add('active');
         renderHistory();
     }
 }
 
-
-/* =========================================================
-   FILE SELECT
-========================================================= */
-
 async function handleFileSelect(e) {
-
-    const file =
-        e.target.files[0];
-
+    const file = e.target.files[0];
     if (!file) return;
 
-
-    /* ================================
-       2 GB LIMIT
-    ================================= */
-
     if (file.size > MAX_FILE_SIZE) {
-
-        alert(
-            "File size 2 GB se zyada hai.\n\n" +
-            "Please select a file up to 2 GB."
-        );
-
+        alert("File size 2 GB से ज़्यादा है। Please select up to 2 GB.");
         e.target.value = "";
-
         resetUploadUI();
-
         return;
     }
 
-
-    /* ================================
-       RESET PROGRESS
-    ================================= */
-
     resetUploadUI();
 
+    document.getElementById('progressCard').style.display = 'block';
+    document.getElementById('resultCard').style.display = 'none';
+    document.getElementById('fileName').innerText = file.name;
+    document.getElementById('fileType').innerText = file.type || "FILE";
 
-    document
-        .getElementById('progressCard')
-        .style.display = 'block';
+    // Create Local Web Preview for HTML files
+    if (file.name.endsWith('.html') || file.name.endsWith('.htm') || file.type === 'text/html') {
+        if (localHtmlPreviewUrl) URL.revokeObjectURL(localHtmlPreviewUrl);
+        localHtmlPreviewUrl = URL.createObjectURL(file);
+    }
 
-    document
-        .getElementById('resultCard')
-        .style.display = 'none';
-
-
-    document
-        .getElementById('fileName')
-        .innerText = file.name;
-
-
-    document
-        .getElementById('fileType')
-        .innerText =
-            file.type ||
-            "FILE";
-
-
-    const thumbUrl =
-        await generateThumbnail(file);
-
-
-    document
-        .getElementById('previewImage')
-        .src = thumbUrl;
-
+    const thumbUrl = await generateThumbnail(file);
+    document.getElementById('previewImage').src = thumbUrl;
 
     uploadFile(file, thumbUrl);
 }
 
-
-/* =========================================================
-   RESET UPLOAD UI
-========================================================= */
-
 function resetUploadUI() {
-
     displayedProgress = 0;
-
     targetProgress = 0;
-
-
     if (progressAnimationFrame) {
-
-        cancelAnimationFrame(
-            progressAnimationFrame
-        );
-
+        cancelAnimationFrame(progressAnimationFrame);
         progressAnimationFrame = null;
     }
 
-
-    const progressBar =
-        document.getElementById('progressBar');
-
-    progressBar.style.width = '0%';
-
-
-    document
-        .getElementById('percentage')
-        .innerText = '0%';
-
-
-    document
-        .getElementById('speed')
-        .innerText = '0 MB/s';
-
-
-    document
-        .getElementById('sizeStats')
-        .innerText = '0 / 0 MB';
-
-
-    document
-        .getElementById('timeStats')
-        .innerText = '00:00';
-
-
-    document
-        .getElementById('uploadStatus')
-        .innerText = 'Uploading...';
-
-
-    document
-        .getElementById('spinner')
-        .style.display = 'block';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('percentage').innerText = '0%';
+    document.getElementById('speed').innerText = '0 MB/s';
+    document.getElementById('sizeStats').innerText = '0 / 0 MB';
+    document.getElementById('timeStats').innerText = '00:00';
+    document.getElementById('uploadStatus').innerText = 'Uploading...';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('htmlPreviewContainer').style.display = 'none';
 }
-
-
-/* =========================================================
-   SMOOTH REAL PROGRESS ANIMATION
-========================================================= */
 
 function animateProgress() {
-
-    const difference =
-        targetProgress - displayedProgress;
-
-
+    const difference = targetProgress - displayedProgress;
     if (Math.abs(difference) < 0.05) {
-
-        displayedProgress =
-            targetProgress;
-
+        displayedProgress = targetProgress;
     } else {
-
-        /*
-         * Important:
-         * Ye fake upload percentage nahi hai.
-         * targetProgress actual XHR upload event
-         * se aata hai.
-         *
-         * Animation sirf UI ko smooth banati hai
-         * taaki progress jump na kare.
-         */
-
-        displayedProgress +=
-            difference * 0.14;
+        displayedProgress += difference * 0.14;
     }
 
+    document.getElementById('progressBar').style.width = displayedProgress + '%';
 
-    document
-        .getElementById('progressBar')
-        .style.width =
-            displayedProgress + '%';
-
-
-    if (displayedProgress < targetProgress ||
-        targetProgress < 100) {
-
-        progressAnimationFrame =
-            requestAnimationFrame(
-                animateProgress
-            );
+    if (displayedProgress < targetProgress || targetProgress < 100) {
+        progressAnimationFrame = requestAnimationFrame(animateProgress);
     }
 }
-
-
-/* =========================================================
-   FORMAT TIME
-========================================================= */
 
 function formatTime(seconds) {
-
-    seconds =
-        Math.max(0, Math.floor(seconds));
-
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    const secs =
-        seconds % 60;
-
-
-    return String(minutes).padStart(2, '0')
-        + ':'
-        + String(secs).padStart(2, '0');
+    seconds = Math.max(0, Math.floor(seconds));
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
 }
 
-
-/* =========================================================
-   UPLOAD FILE
-   ORIGINAL /upload ENDPOINT KEPT
-========================================================= */
-
 function uploadFile(file, thumbUrl) {
-
-    const formData =
-        new FormData();
-
-
-    formData.append(
-        'file',
-        file
-    );
-
-
-    const xhr =
-        new XMLHttpRequest();
-
-
-    currentXHR = xhr;
-
-
-    startTime =
-        performance.now();
-
-
-    /* ================================
-       REAL-TIME UPLOAD PROGRESS
-    ================================= */
-
-    xhr.upload.onprogress =
-        function(e) {
-
-            if (!e.lengthComputable)
-                return;
-
-
-            const now =
-                performance.now();
-
-
-            const elapsed =
-                (now - startTime) / 1000;
-
-
-            const percent =
-                (e.loaded / e.total) * 100;
-
-
-            targetProgress =
-                Math.min(
-                    100,
-                    percent
-                );
-
-
-            /*
-             * Exact current percentage text
-             */
-
-            document
-                .getElementById('percentage')
-                .innerText =
-                    Math.round(percent) + '%';
-
-
-            /*
-             * Real uploaded size
-             */
-
-            const loadedMB =
-                e.loaded /
-                (1024 * 1024);
-
-
-            const totalMB =
-                e.total /
-                (1024 * 1024);
-
-
-            document
-                .getElementById('sizeStats')
-                .innerText =
-                    loadedMB.toFixed(1)
-                    + ' / '
-                    + totalMB.toFixed(1)
-                    + ' MB';
-
-
-            /*
-             * Real upload speed
-             */
-
-            if (elapsed > 0) {
-
-                const speed =
-                    loadedMB /
-                    elapsed;
-
-
-                document
-                    .getElementById('speed')
-                    .innerText =
-                    speed.toFixed(2)
-                    + ' MB/s';
-            }
-
-
-            /*
-             * Real elapsed time
-             */
-
-            document
-                .getElementById('timeStats')
-                .innerText =
-                    formatTime(elapsed);
-
-
-            /*
-             * Smooth visual animation
-             */
-
-            if (!progressAnimationFrame) {
-
-                progressAnimationFrame =
-                    requestAnimationFrame(
-                        animateProgress
-                    );
-            }
-        };
-
-
-    /* ================================
-       UPLOAD COMPLETE
-    ================================= */
-
-    xhr.onload =
-        function() {
-
-            if (xhr.status === 200) {
-
-                targetProgress = 100;
-
-                displayedProgress = 100;
-
-                document
-                    .getElementById('progressBar')
-                    .style.width = '100%';
-
-                document
-                    .getElementById('percentage')
-                    .innerText = '100%';
-
-
-                document
-                    .getElementById('spinner')
-                    .style.display = 'none';
-
-
-                document
-                    .getElementById('uploadStatus')
-                    .innerText =
-                        'Upload Complete';
-
-
-                try {
-
-                    const response =
-                        JSON.parse(
-                            xhr.responseText
-                        );
-
-
-                    document
-                        .getElementById('resultCard')
-                        .style.display =
-                            'block';
-
-
-                    document
-                        .getElementById('playerLink')
-                        .value =
-                            response.player_link;
-
-
-                    document
-                        .getElementById('streamLink')
-                        .value =
-                            response.stream_link;
-
-
-                    /*
-                     * ORIGINAL HISTORY LOGIC
-                     */
-
-                    saveToHistory({
-
-                        name:
-                            response.file_name,
-
-                        size:
-                            (
-                                response.file_size /
-                                (1024 * 1024)
-                            ).toFixed(2)
-                            + ' MB',
-
-                        thumb:
-                            thumbUrl,
-
-                        playerLink:
-                            response.player_link,
-
-                        streamLink:
-                            response.stream_link,
-
-                        date:
-                            new Date()
-                            .toLocaleDateString()
-
-                    });
-
-
-                } catch (error) {
-
-                    alert(
-                        "Invalid JSON response from server!"
-                    );
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const xhr = new XMLHttpRequest();
+    startTime = performance.now();
+
+    xhr.upload.onprogress = function(e) {
+        if (!e.lengthComputable) return;
+        const now = performance.now();
+        const elapsed = (now - startTime) / 1000;
+        const percent = (e.loaded / e.total) * 100;
+
+        targetProgress = Math.min(100, percent);
+        document.getElementById('percentage').innerText = Math.round(percent) + '%';
+
+        const loadedMB = e.loaded / (1024 * 1024);
+        const totalMB = e.total / (1024 * 1024);
+        document.getElementById('sizeStats').innerText = loadedMB.toFixed(1) + ' / ' + totalMB.toFixed(1) + ' MB';
+
+        if (elapsed > 0) {
+            const speed = loadedMB / elapsed;
+            document.getElementById('speed').innerText = speed.toFixed(2) + ' MB/s';
+        }
+        document.getElementById('timeStats').innerText = formatTime(elapsed);
+
+        if (!progressAnimationFrame) {
+            progressAnimationFrame = requestAnimationFrame(animateProgress);
+        }
+    };
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            targetProgress = 100;
+            displayedProgress = 100;
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('percentage').innerText = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('uploadStatus').innerText = 'Upload Complete';
+
+            try {
+                const response = JSON.parse(xhr.responseText);
+                document.getElementById('resultCard').style.display = 'block';
+
+                document.getElementById('playerLink').value = response.player_link;
+                document.getElementById('streamLink').value = response.stream_link;
+
+                // Handle HTML Live Preview Link
+                if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+                    const previewBtnContainer = document.getElementById('htmlPreviewContainer');
+                    const previewLink = document.getElementById('htmlPreviewLink');
+                    previewBtnContainer.style.display = 'block';
+                    
+                    // Server link or local blob url
+                    previewLink.href = response.stream_link || localHtmlPreviewUrl;
                 }
 
+                saveToHistory({
+                    name: response.file_name,
+                    size: (response.file_size / (1024 * 1024)).toFixed(2) + ' MB',
+                    thumb: thumbUrl,
+                    playerLink: response.player_link,
+                    streamLink: response.stream_link,
+                    date: new Date().toLocaleDateString()
+                });
 
-            } else {
-
-                document
-                    .getElementById('spinner')
-                    .style.display = 'none';
-
-
-                document
-                    .getElementById('uploadStatus')
-                    .innerText =
-                        'Upload Failed';
-
-
-                alert(
-                    'Upload failed with status: '
-                    + xhr.status
-                );
+            } catch (error) {
+                alert("Invalid JSON response from server!");
             }
+        } else {
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('uploadStatus').innerText = 'Upload Failed';
+            alert('Upload failed with status: ' + xhr.status);
+        }
+    };
 
+    xhr.onerror = function() {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('uploadStatus').innerText = 'Network Error';
+        alert('Network error या Render Server offline mode में है!');
+    };
 
-            currentXHR = null;
-        };
-
-
-    /* ================================
-       NETWORK ERROR
-    ================================= */
-
-    xhr.onerror =
-        function() {
-
-            document
-                .getElementById('spinner')
-                .style.display = 'none';
-
-
-            document
-                .getElementById('uploadStatus')
-                .innerText =
-                    'Network Error';
-
-
-            alert(
-                'Network error ya Render Server offline/sleep mode par hai!'
-            );
-
-
-            currentXHR = null;
-        };
-
-
-    /* ================================
-       SERVER ENDPOINT
-       SAME AS ORIGINAL
-    ================================= */
-
-    const targetEndpoint =
-        SERVER_URL.replace(/\/+$/, '')
-        + '/upload';
-
-
-    xhr.open(
-        'POST',
-        targetEndpoint,
-        true
-    );
-
-
+    const targetEndpoint = SERVER_URL.replace(/\/+$/, '') + '/upload';
+    xhr.open('POST', targetEndpoint, true);
     xhr.send(formData);
 }
 
-
-/* =========================================================
-   THUMBNAIL
-========================================================= */
-
 function generateThumbnail(file) {
-
     return new Promise((resolve) => {
-
-        if (
-            file.type.startsWith('image/')
-        ) {
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                e =>
-                    resolve(
-                        e.target.result
-                    );
-
-
+        if (file.name.endsWith('.html') || file.name.endsWith('.htm') || file.type === 'text/html') {
+            // HTML File Icon Canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 100; canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,100,100);
+            ctx.fillStyle = '#22c55e'; ctx.font = 'bold 36px sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('HTML', 50, 50);
+            resolve(canvas.toDataURL());
+        }
+        else if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
             reader.readAsDataURL(file);
-
+        } else if (file.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.preload = 'metadata'; video.muted = true; video.playsInline = true;
+            video.src = URL.createObjectURL(file);
+            video.onloadeddata = () => {
+                try { video.currentTime = Math.min(1, video.duration || 1); } catch (_) {}
+            };
+            video.onseeked = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 100; canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, 100, 100);
+                resolve(canvas.toDataURL());
+                URL.revokeObjectURL(video.src);
+            };
+            video.onerror = () => resolve('https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg');
+        } else {
+            resolve('https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg');
         }
-
-        else if (
-            file.type.startsWith('video/')
-        ) {
-
-            const video =
-                document.createElement('video');
-
-
-            video.preload =
-                'metadata';
-
-            video.muted = true;
-
-            video.playsInline = true;
-
-            video.src =
-                URL.createObjectURL(file);
-
-
-            video.onloadeddata =
-                () => {
-
-                    try {
-
-                        video.currentTime =
-                            Math.min(
-                                1,
-                                video.duration || 1
-                            );
-
-                    } catch (_) {}
-                };
-
-
-            video.onseeked =
-                () => {
-
-                    const canvas =
-                        document.createElement(
-                            'canvas'
-                        );
-
-
-                    canvas.width = 100;
-                    canvas.height = 100;
-
-
-                    const ctx =
-                        canvas.getContext(
-                            '2d'
-                        );
-
-
-                    ctx.drawImage(
-                        video,
-                        0,
-                        0,
-                        100,
-                        100
-                    );
-
-
-                    resolve(
-                        canvas.toDataURL()
-                    );
-
-
-                    URL.revokeObjectURL(
-                        video.src
-                    );
-                };
-
-
-            video.onerror =
-                () => {
-
-                    resolve(
-                        'https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg'
-                    );
-                };
-
-        }
-
-        else {
-
-            resolve(
-                'https://i.ibb.co/S4Vs3vs2/IMG-20260924-WA0017.jpg'
-            );
-        }
-
     });
 }
 
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
 function saveToHistory(item) {
-
-    let history =
-        JSON.parse(
-            localStorage.getItem(
-                'hrry_history'
-            ) || '[]'
-        );
-
-
+    let history = JSON.parse(localStorage.getItem('hrry_history') || '[]');
     history.unshift(item);
-
-
-    localStorage.setItem(
-        'hrry_history',
-        JSON.stringify(history)
-    );
+    localStorage.setItem('hrry_history', JSON.stringify(history));
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
 function escapeHTML(value) {
-
     return String(value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -2575,333 +962,95 @@ function escapeHTML(value) {
         .replace(/'/g, '&#039;');
 }
 
-
-/* =========================================================
-   HISTORY RENDER
-========================================================= */
-
 function renderHistory() {
-
-    const container =
-        document.getElementById(
-            'historyContainer'
-        );
-
-
-    let history =
-        JSON.parse(
-            localStorage.getItem(
-                'hrry_history'
-            ) || '[]'
-        );
-
+    const container = document.getElementById('historyContainer');
+    let history = JSON.parse(localStorage.getItem('hrry_history') || '[]');
 
     if (history.length === 0) {
-
         container.innerHTML = `
-
-            <div
-                style="
-                    text-align:center;
-                    padding:45px 10px;
-                    color:#777f91;
-                ">
-
-                <i
-                    class="fa-solid fa-box-open"
-                    style="
-                        font-size:35px;
-                        margin-bottom:12px;
-                    ">
-                </i>
-
-                <p>
-                    No upload history found.
-                </p>
-
-            </div>
-
-        `;
-
+            <div style="text-align:center; padding:45px 10px; color:#777f91;">
+                <i class="fa-solid fa-box-open" style="font-size:35px; margin-bottom:12px;"></i>
+                <p>No upload history found.</p>
+            </div>`;
         return;
     }
 
-
-    container.innerHTML =
-        history.map(
-            (item, index) => `
-
-        <div class="history-item">
-
-            <img
-                src="${item.thumb}"
-                alt="Thumbnail">
-
-            <div class="history-details">
-
-                <div class="history-title">
-                    ${escapeHTML(item.name)}
-                </div>
-
-                <div class="history-meta">
-
-                    ${escapeHTML(item.size)}
-                    •
-                    ${escapeHTML(item.date)}
-
-                </div>
-
+    container.innerHTML = history.map((item, index) => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:18px; padding:13px; display:flex; align-items:center; gap:12px;">
+            <img src="${item.thumb}" style="width:58px; height:58px; border-radius:13px; object-fit:cover; background:#000;">
+            <div style="flex:1; min-width:0;">
+                <div style="font-weight:700; font-size:13px; margin-bottom:5px; word-break:break-all;">${escapeHTML(item.name)}</div>
+                <div style="font-size:10px; color:var(--muted);">${escapeHTML(item.size)} • ${escapeHTML(item.date)}</div>
             </div>
-
-
-            <div class="history-actions">
-
-                <a
-                    href="${item.playerLink}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn btn-sm">
-
-                    <i class="fa-solid fa-play"></i>
-
+            <div style="display:flex; gap:6px;">
+                <a href="${item.streamLink}" target="_blank" class="btn" style="padding:7px 9px; font-size:10px;">
+                    <i class="fa-solid fa-globe"></i>
                 </a>
-
-
-                <button
-                    class="btn btn-sm"
-                    style="background:#343b4b;"
-                    onclick="copyText(${index})">
-
+                <button class="btn" style="background:#343b4b; padding:7px 9px; font-size:10px;" onclick="copyText(${index})">
                     <i class="fa-regular fa-copy"></i>
-
                 </button>
-
             </div>
-
         </div>
-
-    `
-        ).join('');
+    `).join('');
 }
-
-
-/* =========================================================
-   COPY HISTORY LINK
-========================================================= */
 
 function copyText(index) {
-
-    const history =
-        JSON.parse(
-            localStorage.getItem(
-                'hrry_history'
-            ) || '[]'
-        );
-
-
-    if (
-        !history[index] ||
-        !history[index].streamLink
-    ) return;
-
-
-    navigator.clipboard.writeText(
-        history[index].streamLink
-    );
-
-
+    const history = JSON.parse(localStorage.getItem('hrry_history') || '[]');
+    if (!history[index] || !history[index].streamLink) return;
+    navigator.clipboard.writeText(history[index].streamLink);
     showCopyMessage();
 }
-
-
-/* =========================================================
-   COPY INPUT
-========================================================= */
 
 function copyInput(id) {
-
-    const input =
-        document.getElementById(id);
-
-
-    navigator.clipboard.writeText(
-        input.value
-    );
-
-
+    const input = document.getElementById(id);
+    navigator.clipboard.writeText(input.value);
     showCopyMessage();
 }
 
-
-/* =========================================================
-   COPY MESSAGE
-========================================================= */
-
 function showCopyMessage() {
+    const old = document.getElementById('copyToast');
+    if (old) old.remove();
 
-    const old =
-        document.getElementById(
-            'copyToast'
-        );
-
-
-    if (old)
-        old.remove();
-
-
-    const toast =
-        document.createElement('div');
-
-
-    toast.id =
-        'copyToast';
-
-
-    toast.innerHTML =
-        '<i class="fa-solid fa-check"></i> Link copied';
-
-
-    Object.assign(
-        toast.style,
-        {
-            position: 'fixed',
-            left: '50%',
-            bottom: '25px',
-            transform: 'translateX(-50%)',
-            zIndex: '9999',
-            padding: '11px 17px',
-            borderRadius: '13px',
-            background: 'rgba(20,24,34,.94)',
-            border: '1px solid rgba(255,255,255,.10)',
-            color: 'white',
-            fontSize: '12px',
-            fontWeight: '700',
-            boxShadow: '0 12px 35px rgba(0,0,0,.45)',
-            backdropFilter: 'blur(20px)'
-        }
-    );
-
+    const toast = document.createElement('div');
+    toast.id = 'copyToast';
+    toast.innerHTML = '<i class="fa-solid fa-check"></i> Link copied';
+    Object.assign(toast.style, {
+        position: 'fixed', left: '50%', bottom: '25px',
+        transform: 'translateX(-50%)', zIndex: '9999',
+        padding: '11px 17px', borderRadius: '13px',
+        background: 'rgba(20,24,34,.94)', border: '1px solid rgba(255,255,255,.10)',
+        color: 'white', fontSize: '12px', fontWeight: '700',
+        boxShadow: '0 12px 35px rgba(0,0,0,.45)', backdropFilter: 'blur(20px)'
+    });
 
     document.body.appendChild(toast);
-
-
     setTimeout(() => {
-
         toast.style.opacity = '0';
-
-        toast.style.transition =
-            'opacity .25s ease';
-
-        setTimeout(
-            () => toast.remove(),
-            300
-        );
-
+        toast.style.transition = 'opacity .25s ease';
+        setTimeout(() => toast.remove(), 300);
     }, 1300);
 }
 
-
-/* =========================================================
-   CLEAR HISTORY
-========================================================= */
-
 function clearHistory() {
-
-    if (
-        !confirm(
-            'Clear all upload history?'
-        )
-    ) return;
-
-
-    localStorage.removeItem(
-        'hrry_history'
-    );
-
-
+    if (!confirm('Clear all upload history?')) return;
+    localStorage.removeItem('hrry_history');
     renderHistory();
 }
 
-
-/* =========================================================
-   DRAG & DROP
-========================================================= */
-
-const dropZone =
-    document.getElementById(
-        'dropZone'
-    );
-
-
-dropZone.addEventListener(
-    'dragover',
-    function(e) {
-
-        e.preventDefault();
-
-        dropZone.style.borderColor =
-            '#00b7ff';
-
-        dropZone.style.transform =
-            'scale(1.01)';
-    }
-);
-
-
-dropZone.addEventListener(
-    'dragleave',
-    function() {
-
-        dropZone.style.borderColor =
-            '';
-
-        dropZone.style.transform =
-            '';
-    }
-);
-
-
-dropZone.addEventListener(
-    'drop',
-    function(e) {
-
-        e.preventDefault();
-
-        dropZone.style.borderColor =
-            '';
-
-        dropZone.style.transform =
-            '';
-
-
-        const files =
-            e.dataTransfer.files;
-
-
-        if (!files.length)
-            return;
-
-
-        const input =
-            document.getElementById(
-                'fileInput'
-            );
-
-
-        /*
-         * Same existing upload flow.
-         */
-
-        input.files = files;
-
-
-        handleFileSelect({
-            target: input
-        });
-    }
-);
-
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#00b7ff'; });
+dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = ''; });
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = '';
+    const files = e.dataTransfer.files;
+    if (!files.length) return;
+    const input = document.getElementById('fileInput');
+    input.files = files;
+    handleFileSelect({ target: input });
+});
 </script>
 
 </body>
 </html>
+
